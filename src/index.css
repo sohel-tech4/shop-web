@@ -1,0 +1,611 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Hind Siliguri", "Inter", system-ui, sans-serif;
+  background: #f3f8fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.gradient-text {
+  background: linear-gradient(100deg, #0f5f86 0%, #159f9b 70%, #36bfa8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-shell {
+  background:
+    radial-gradient(circle at 75% 25%, rgba(143, 230, 208, 0.28), transparent 28%),
+    radial-gradient(circle at 15% 15%, rgba(22, 135, 185, 0.10), transparent 25%),
+    linear-gradient(135deg, #f7fcfd 0%, #edf8f7 100%);
+}
+
+.service-card {
+  min-height: 218px;
+  border: 1px solid #e4eef2;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.94);
+  padding: 1.35rem;
+  box-shadow: 0 8px 28px rgba(7, 51, 74, 0.05);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  border-color: #bdebe2;
+  box-shadow: 0 18px 40px rgba(7, 51, 74, 0.10);
+}
+
+.service-icon {
+  display: flex;
+  height: 46px;
+  width: 46px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: #edf9f7;
+  font-size: 22px;
+  box-shadow: inset 0 0 0 1px rgba(21, 159, 155, 0.10);
+}
+
+.modal-box {
+  max-height: 90vh;
+}
+
+.service-icon {
+  color: #0f7080;
+  background: linear-gradient(145deg, #effcf9, #e7f5fa);
+  border: 1px solid #d7eeec;
+}
+.service-card .service-icon { transition: transform 180ms ease, box-shadow 180ms ease; }
+.service-card:hover .service-icon {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 10px 24px rgba(15, 112, 128, 0.12);
+}
+@media (max-width: 640px) {
+  .service-card {
+    min-width: 0;
+    min-height: 168px;
+    padding: 0.65rem;
+    border-radius: 0.85rem;
+    overflow-wrap: anywhere;
+  }
+
+  .service-card .service-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+
+  .service-card .service-icon svg { width: 17px; height: 17px; }
+  .service-card > div:nth-child(2) { margin-top: 0.65rem; font-size: 0.78rem; line-height: 1.25rem; }
+  .service-card > div:nth-child(3) { margin-top: 0.35rem; font-size: 0.68rem; line-height: 1.05rem; }
+  .service-card > div:nth-child(4) { margin-top: 0.55rem; font-size: 0.62rem; line-height: 1rem; }
+  .service-card > div:first-child > svg { width: 14px; height: 14px; margin-top: 0.4rem; }
+
+  .service-modal-overlay.modal.modal-open {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    min-height: 0;
+    padding: 0.65rem !important;
+    overflow-y: auto;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .service-modal-box.modal-box {
+    width: 100% !important;
+    max-width: none !important;
+    max-height: calc(100dvh - 1.3rem);
+    margin: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .modal-box .visa-option {
+    padding: 0.9rem !important;
+  }
+
+  .modal-box .visa-option-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
+/* =========================
+   NextGen Light / Dark Mode
+   ========================= */
+.theme-toggle {
+  background: #f1f5f9;
+  color: #17384a;
+  border: 1px solid #e2e8f0;
+}
+.theme-toggle:hover {
+  background: #e2e8f0;
+}
+
+.dark-mode {
+  color: #e5edf2;
+  background: #0b1720;
+  min-height: 100vh;
+}
+
+.dark-mode header {
+  background: rgba(10, 24, 34, 0.92) !important;
+  border-color: rgba(148, 163, 184, 0.14) !important;
+}
+
+.dark-mode .theme-toggle {
+  background: #162b39;
+  color: #f6d66b;
+  border-color: #294453;
+}
+
+.dark-mode .theme-toggle:hover {
+  background: #203846;
+}
+
+.dark-mode .btn-ghost {
+  color: #dbe7ed;
+}
+
+.dark-mode .btn-ghost:hover {
+  background: rgba(255,255,255,.07);
+}
+
+.dark-mode .hero-shell {
+  background:
+    radial-gradient(circle at 75% 25%, rgba(45, 185, 158, 0.15), transparent 28%),
+    radial-gradient(circle at 15% 15%, rgba(22, 135, 185, 0.12), transparent 25%),
+    linear-gradient(135deg, #0b1b25 0%, #102a31 100%);
+}
+
+.dark-mode .hero-shell h1,
+.dark-mode #services h2,
+.dark-mode #about h3 {
+  color: #edf7fa !important;
+}
+
+.dark-mode .hero-shell p,
+.dark-mode #services p,
+.dark-mode #about p {
+  color: #9fb2bd !important;
+}
+
+.dark-mode .hero-shell .bg-white\/80,
+.dark-mode .hero-shell .bg-white\/75 {
+  background: rgba(18, 38, 49, 0.82) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+.dark-mode .hero-shell .text-slate-500 {
+  color: #9fb2bd !important;
+}
+
+.dark-mode .hero-shell .btn:not(.btn-primary) {
+  background: #152c39;
+  color: #7ee2d3;
+  border-color: #315362;
+}
+
+.dark-mode #services {
+  background: #0b1720;
+}
+
+.dark-mode .input {
+  background: #122530 !important;
+  border-color: #2a4350 !important;
+  color: #e6f0f4 !important;
+}
+
+.dark-mode .input input {
+  color: #e6f0f4 !important;
+}
+
+.dark-mode .input input::placeholder {
+  color: #718794;
+}
+
+.dark-mode .service-card {
+  background: #122530;
+  border-color: #263f4c;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+}
+
+.dark-mode .service-card:hover {
+  border-color: #2b8d87;
+  box-shadow: 0 18px 40px rgba(0,0,0,.28);
+}
+
+.dark-mode .service-card .text-\[\#07334a\] {
+  color: #edf7fa !important;
+}
+
+.dark-mode .service-card .text-slate-500 {
+  color: #9fb2bd !important;
+}
+
+.dark-mode .service-card .text-slate-300 {
+  color: #66808d !important;
+}
+
+.dark-mode .service-icon {
+  background: linear-gradient(145deg, #17363d, #143044);
+  border-color: #28535c;
+  color: #73dfcf;
+}
+
+.dark-mode .bg-white {
+  background-color: #10212b !important;
+}
+
+.dark-mode .ring-slate-200 {
+  --tw-ring-color: #2a4350 !important;
+}
+
+.dark-mode .bg-slate-50 {
+  background-color: #172c37 !important;
+}
+
+.dark-mode .text-slate-600 {
+  color: #a9bac3 !important;
+}
+
+.dark-mode .text-slate-500 {
+  color: #93a7b1 !important;
+}
+
+.dark-mode #about {
+  background: #0d1d27 !important;
+}
+
+.dark-mode #about .border-slate-100 {
+  border-color: #243d49 !important;
+}
+
+.dark-mode #about .bg-base-200 {
+  background: #122a35 !important;
+}
+
+.dark-mode #about .bg-white {
+  background: #18313d !important;
+}
+
+.dark-mode #about h3 {
+  color: #edf7fa !important;
+}
+
+.dark-mode #contact {
+  background: #0b1720;
+}
+
+.dark-mode .modal-box {
+  background: #10232e;
+  color: #e6f0f4;
+}
+
+.dark-mode .modal-box .border-b {
+  border-color: #29424e !important;
+}
+
+.dark-mode .modal-box h3,
+.dark-mode .modal-box h4 {
+  color: #edf7fa !important;
+}
+
+.dark-mode .modal-box .text-slate-600 {
+  color: #a9bac3 !important;
+}
+
+.dark-mode .modal-box .bg-base-200 {
+  background: #172f3b !important;
+}
+
+.dark-mode .modal-box .bg-\[\#eefbf8\] {
+  background: #143a38 !important;
+  color: #9ce9d9 !important;
+}
+
+.dark-mode .modal-box .btn:not(.btn-primary) {
+  background: #172e3a !important;
+  color: #d9e8ed !important;
+  border-color: #304a57 !important;
+}
+
+.dark-mode .modal-box .btn-circle {
+  background: transparent !important;
+}
+
+.dark-mode footer {
+  border-color: rgba(255,255,255,.10);
+}
+
+.dark-mode .mobile-menu,
+.dark-mode header .border-t {
+  border-color: #263f4c !important;
+}
+
+.dark-mode .modal-backdrop {
+  background: rgba(0,0,0,.72);
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    min-width: 42px;
+  }
+}
+
+/* Final visual refinements */
+.brand-title {
+  color: #0b3650;
+  letter-spacing: -0.02em;
+}
+.brand-accent {
+  color: #079b96;
+}
+.dark-mode .brand-title {
+  color: #f5fbff !important;
+  text-shadow: 0 1px 18px rgba(92, 224, 207, 0.12);
+}
+.dark-mode .brand-accent {
+  color: #66e1d1 !important;
+}
+
+/* Animated service-icon cluster for the hero banner */
+.service-orbit {
+  position: relative;
+  width: min(430px, 42vw);
+  height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+.orbit-ring {
+  position: absolute;
+  border: 1px solid rgba(16, 154, 148, .25);
+  border-radius: 999px;
+  transform: rotate(-12deg);
+}
+.orbit-ring-one {
+  width: 285px;
+  height: 285px;
+  animation: orbitPulse 4s ease-in-out infinite;
+}
+.orbit-ring-two {
+  width: 205px;
+  height: 205px;
+  border-color: rgba(41, 147, 190, .22);
+  animation: orbitPulse 4s ease-in-out infinite reverse;
+}
+.orbit-core {
+  width: 92px;
+  height: 92px;
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0b8d88;
+  background: linear-gradient(145deg, #effffb, #dceff7);
+  border: 1px solid #cdebe6;
+  box-shadow: 0 18px 55px rgba(16, 119, 134, .16);
+  z-index: 3;
+  animation: coreFloat 3.5s ease-in-out infinite;
+}
+.orbit-icon {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  color: #0d7884;
+  background: rgba(255,255,255,.9);
+  border: 1px solid #d5ecec;
+  box-shadow: 0 12px 28px rgba(20, 74, 92, .10);
+  animation: iconFloat 3.2s ease-in-out infinite;
+  animation-delay: var(--orbit-delay);
+  transform:
+    rotate(calc(var(--orbit-index) * 30deg))
+    translateY(-145px)
+    rotate(calc(var(--orbit-index) * -30deg));
+}
+.orbit-icon:nth-of-type(4n) { animation-duration: 3.8s; }
+.orbit-icon:nth-of-type(3n) { animation-duration: 2.9s; }
+
+@keyframes iconFloat {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: -10px; }
+}
+@keyframes coreFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-7px) scale(1.03); }
+}
+@keyframes orbitPulse {
+  0%, 100% { opacity: .65; transform: scale(1) rotate(-12deg); }
+  50% { opacity: 1; transform: scale(1.045) rotate(0deg); }
+}
+
+.dark-mode .orbit-icon {
+  color: #78e5d5;
+  background: rgba(18, 39, 50, .92);
+  border-color: #315461;
+  box-shadow: 0 14px 32px rgba(0,0,0,.24);
+}
+.dark-mode .orbit-core {
+  color: #7de7d7;
+  background: linear-gradient(145deg, #173e42, #18394c);
+  border-color: #35666a;
+  box-shadow: 0 18px 55px rgba(0,0,0,.28);
+}
+.dark-mode .orbit-ring {
+  border-color: rgba(94, 219, 202, .22);
+}
+.dark-mode .orbit-ring-two {
+  border-color: rgba(92, 169, 210, .20);
+}
+
+@media (max-width: 900px) {
+  .service-orbit {
+    width: 320px;
+    height: 280px;
+    margin: 0 auto;
+  }
+  .orbit-ring-one { width: 225px; height: 225px; }
+  .orbit-ring-two { width: 165px; height: 165px; }
+  .orbit-icon {
+    width: 48px;
+    height: 48px;
+    transform:
+      rotate(calc(var(--orbit-index) * 30deg))
+      translateY(-115px)
+      rotate(calc(var(--orbit-index) * -30deg));
+  }
+}
+@media (max-width: 640px) {
+  .service-orbit { display: none; }
+}
+
+.visa-option { border: 1px solid #d9e9ec; background: #fff; border-radius: 1.25rem; padding: 1.25rem; transition: .2s ease; }
+.visa-option:hover { transform: translateY(-3px); border-color: #67cfc3; box-shadow: 0 15px 35px rgba(15,112,128,.12); }
+.visa-option-icon { width: 50px; height: 50px; border-radius: 16px; display:flex; align-items:center; justify-content:center; color:#0f7b83; background:#ecfaf7; border:1px solid #d4efea; }
+.dark-mode .visa-option { background:#132833; border-color:#2c4b58; }
+.dark-mode .visa-option:hover { border-color:#4fbdb1; box-shadow:0 18px 38px rgba(0,0,0,.28); }
+.dark-mode .visa-option-icon { color:#78e5d5; background:#173c3f; border-color:#315f61; }
+
+/* Hero center logo and stronger Indian Visa dark-mode readability */
+.orbit-logo { width: 68px; height: 68px; object-fit: contain; border-radius: 18px; display:block; filter: drop-shadow(0 8px 18px rgba(0,0,0,.10)); }
+.dark-mode .orbit-logo { filter: drop-shadow(0 8px 22px rgba(0,0,0,.35)); }
+.visa-option-title { color: #07334a; }
+.visa-option-desc { color: #64748b; }
+.visa-option-link { color: #159f9b; }
+.dark-mode .visa-option-title { color: #f5fbff !important; }
+.dark-mode .visa-option-desc { color: #b9cbd3 !important; }
+.dark-mode .visa-option-link { color: #72e3d3 !important; }
+
+@media (max-width: 640px) {
+  .mobile-orbit-panel .service-orbit {
+    display: flex;
+    width: min(100%, 300px);
+    height: 220px;
+  }
+  .mobile-orbit-panel .orbit-ring-one { width: 175px; height: 175px; }
+  .mobile-orbit-panel .orbit-ring-two { width: 130px; height: 130px; }
+  .mobile-orbit-panel .orbit-icon { width: 38px; height: 38px; border-radius: 12px; transform: rotate(calc(var(--orbit-index) * 30deg)) translateY(-88px) rotate(calc(var(--orbit-index) * -30deg)); }
+  .mobile-orbit-panel .orbit-core { width: 70px; height: 70px; border-radius: 20px; }
+  .mobile-orbit-panel .orbit-logo { width: 54px; height: 54px; }
+}
+
+
+/* Requested refinements: preserve the existing visual design */
+@media (max-width: 640px) {
+  /* Match the desktop hero icon-panel translucency */
+  .mobile-orbit-panel {
+    background: rgba(255, 255, 255, 0.10) !important;
+    border-color: rgba(255, 255, 255, 0.20) !important;
+    backdrop-filter: blur(10px);
+  }
+
+  /* Center category filters on the mobile screen while allowing wrapping */
+  #services .category-filter-row {
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
+/* Keep footer brand and supporting text readable in dark mode */
+.dark-mode footer .brand-title {
+  color: #ffffff !important;
+}
+.dark-mode footer .brand-accent {
+  color: #8af0e1 !important;
+}
+.dark-mode footer .text-white\/60 {
+  color: #c4d3dc !important;
+}
+.dark-mode footer .text-white\/70 {
+  color: #d6e2e8 !important;
+}
+.dark-mode footer .text-white\/45 {
+  color: #b7c8d1 !important;
+}
+
+/* Floating bilingual AI assistant — isolated styles to preserve existing site UI. */
+.ng-chatbot { position: fixed; right: 22px; bottom: 22px; z-index: 1000; font-family: inherit; }
+.ng-chat-launcher { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 54px; padding: 0 19px; border: 0; border-radius: 999px; color: #fff; background: linear-gradient(135deg, #0f7080, #159f9b); box-shadow: 0 10px 30px rgba(15,112,128,.28); cursor: pointer; font-weight: 700; transition: transform .18s ease, box-shadow .18s ease; }
+.ng-chat-launcher:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(15,112,128,.35); }
+.ng-chat-launcher.is-open { width: 54px; padding: 0; }
+.ng-chat-panel { position: absolute; right: 0; bottom: 68px; display: flex; flex-direction: column; width: min(380px, calc(100vw - 28px)); height: min(570px, calc(100dvh - 115px)); min-height: 330px; overflow: hidden; border: 1px solid #d9e9ed; border-radius: 20px; background: #fff; color: #19313b; box-shadow: 0 18px 60px rgba(7,51,74,.22); }
+.ng-chat-header { display: flex; align-items: center; gap: 10px; padding: 14px; color: white; background: linear-gradient(120deg, #0d5f78, #159f9b); }
+.ng-chat-avatar { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border: 1px solid rgba(255,255,255,.3); border-radius: 13px; background: rgba(255,255,255,.14); }
+.ng-chat-heading { display: flex; flex: 1; flex-direction: column; gap: 4px; min-width: 0; }
+.ng-chat-heading strong { font-size: 14px; line-height: 1.25; }
+.ng-chat-heading span { display: flex; align-items: center; gap: 6px; font-size: 10px; opacity: .9; }
+.ng-chat-heading i { width: 7px; height: 7px; border-radius: 50%; background: #a7f3d0; }
+.ng-chat-icon-btn { display: grid; width: 30px; height: 30px; flex: 0 0 30px; place-items: center; border: 0; border-radius: 9px; color: white; background: rgba(255,255,255,.12); cursor: pointer; }
+.ng-chat-icon-btn:hover { background: rgba(255,255,255,.24); }
+.ng-chat-notice { padding: 8px 13px; color: #6b7280; background: #f5fafb; border-bottom: 1px solid #e8f0f2; font-size: 10px; line-height: 1.5; }
+.ng-chat-messages { display: flex; flex: 1; flex-direction: column; gap: 12px; overflow-y: auto; padding: 15px 12px; background: #fbfdfd; }
+.ng-chat-row { display: flex; align-items: flex-end; gap: 7px; max-width: 94%; }
+.ng-chat-row.is-user { align-self: flex-end; }
+.ng-chat-row.is-assistant { align-self: flex-start; }
+.ng-chat-small-avatar { display: grid; width: 25px; height: 25px; flex: 0 0 25px; place-items: center; color: #0f7080; border-radius: 9px; background: #e5f6f3; }
+.ng-chat-bubble { padding: 10px 12px; border-radius: 15px; font-size: 13px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
+.ng-chat-row.is-assistant .ng-chat-bubble { color: #263d46; background: #edf5f6; border-bottom-left-radius: 5px; }
+.ng-chat-row.is-user .ng-chat-bubble { color: white; background: #117f89; border-bottom-right-radius: 5px; }
+.ng-chat-typing { display: flex; align-items: center; gap: 7px; color: #637984 !important; }
+.ng-chat-spin { animation: ng-chat-spin 1s linear infinite; }
+@keyframes ng-chat-spin { to { transform: rotate(360deg); } }
+.ng-chat-form { display: flex; align-items: center; gap: 8px; padding: 10px 11px; border-top: 1px solid #e6eef0; background: white; }
+.ng-chat-form input { width: 100%; min-width: 0; height: 42px; padding: 0 12px; border: 1px solid #d9e6e9; border-radius: 12px; outline: none; color: #19313b; background: #fbfdfd; font: inherit; font-size: 13px; }
+.ng-chat-form input:focus { border-color: #159f9b; box-shadow: 0 0 0 3px rgba(21,159,155,.12); }
+.ng-chat-form button { display: grid; width: 42px; height: 42px; flex: 0 0 42px; place-items: center; border: 0; border-radius: 12px; color: white; background: #117f89; cursor: pointer; }
+.ng-chat-form button:disabled { cursor: not-allowed; opacity: .45; }
+.ng-chat-footer { padding: 0 12px 10px; color: #87969d; background: white; text-align: center; font-size: 9px; }
+.dark-mode .ng-chat-panel { border-color: #314b55; background: #142b33; color: #edf7f8; }
+.dark-mode .ng-chat-notice { color: #b7c7cd; background: #1a343d; border-color: #314b55; }
+.dark-mode .ng-chat-messages { background: #10252c; }
+.dark-mode .ng-chat-row.is-assistant .ng-chat-bubble { color: #e5f1f3; background: #203a43; }
+.dark-mode .ng-chat-small-avatar { color: #b8f2e9; background: #254a50; }
+.dark-mode .ng-chat-form, .dark-mode .ng-chat-footer { background: #142b33; border-color: #314b55; }
+.dark-mode .ng-chat-form input { color: #edf7f8; background: #10252c; border-color: #3b5963; }
+.dark-mode .ng-chat-footer { color: #a8bac0; }
+@media (max-width: 480px) {
+  .ng-chatbot { right: 12px; bottom: 12px; }
+  .ng-chat-panel { position: fixed; right: 8px; bottom: 76px; width: calc(100vw - 16px); height: min(620px, calc(100dvh - 92px)); min-height: 300px; border-radius: 17px; }
+  .ng-chat-launcher { min-height: 50px; padding: 0 16px; }
+  .ng-chat-launcher.is-open { width: 50px; }
+}
+
+
+/* Footer contrast fix: keep the brand readable against its dark background in both themes. */
+footer .brand-title {
+  color: #ffffff !important;
+}
+footer .brand-accent {
+  color: #8af0e1 !important;
+}
+footer .text-white\/60 {
+  color: #c4d3dc !important;
+}
+footer .text-white\/70 {
+  color: #d6e2e8 !important;
+}
+footer .text-white\/45 {
+  color: #b7c8d1 !important;
+}
