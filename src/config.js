@@ -1,10 +1,10 @@
 // ================================================
-// NextGen e-Service Center — EDIT THESE DETAILS
+// Nagorik  Computer & e-Service — EDIT THESE DETAILS
 // ================================================
 
 export const BUSINESS = {
-  name: "NextGen e-Service Center",
-  shortName: "NextGen",
+  name: "Nagorik  Computer & e-Service",
+  shortName: "Nagorik ",
   taglineBn: "আপনার বিশ্বস্ত ডিজিটাল সেবা কেন্দ্র",
   taglineEn: "Your Trusted Digital Service Center",
 
@@ -14,7 +14,7 @@ export const BUSINESS = {
   email: "dhaka2627@gmail.com",
 
   facebook:
-    "https://www.facebook.com/nextgenservice247"
+    "https://www.facebook.com/Nagorik service247"
 };
 
 export const getWhatsAppUrl = (serviceName = "") => {

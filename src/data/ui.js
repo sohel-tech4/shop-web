@@ -3,6 +3,12 @@ import {
   BriefcaseBusiness,
   Camera,
   CreditCard,
+  Copy,
+  CarFront,
+  FileSignature,
+  FileQuestion,
+  Image,
+  BookOpen,
   FileCheck2,
   FilePenLine,
   FileText,
@@ -43,6 +49,12 @@ export const serviceIcons = {
   "bmet-training": Briefcase,
   "ai-services": Sparkles,
   "social-poster": Palette,
+  photocopy: Copy,
+  "photo-print": Image,
+  "driving-license": CarFront,
+  "deed-writing": FileSignature,
+  writing: FileQuestion,
+  "laminating-spiral": BookOpen,
 };
 
 export const heroIcons = [Plane, CreditCard, FileCheck2, Stethoscope, Printer, ScanLine, Palette, Sparkles, Briefcase, GraduationCap, ReceiptText, Camera];

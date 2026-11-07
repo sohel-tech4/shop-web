@@ -1,4 +1,4 @@
-# NextGen e-Service Center — Gemini AI Chatbot Setup (বাংলা)
+# Nagorik  Computer & e-Service — Gemini AI Chatbot Setup (বাংলা)
 
 এই সংস্করণে সাইটের বিদ্যমান বাংলা/ইংরেজি চ্যাটবটের ডিজাইন অপরিবর্তিত রেখে OpenAI API-এর বদলে Google Gemini API ব্যবহার করা হয়েছে। API key শুধু Netlify serverless function-এ থাকবে; ব্রাউজারের কোডে নয়।
 

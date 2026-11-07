@@ -33,7 +33,7 @@ export default function Hero({ lang, serviceCount, onExplore }) {
                   {heroIcons.map((Icon, index) => (
                     <div key={index} className="orbit-icon" style={{ "--orbit-index": index, "--orbit-delay": `${index * 0.18}s` }}><Icon size={21} strokeWidth={1.9} /></div>
                   ))}
-                  <div className="orbit-core"><img src="/logo.PNG" alt="NextGen e-Service Center" className="orbit-logo" /></div>
+                  <div className="orbit-core"><img src="/logo.PNG" alt="Nagorik  Computer & e-Service" className="orbit-logo" /></div>
                 </div>
                 <div className="text-center text-sm font-bold text-[#0f706d]">{serviceCount}+ {lang === "bn" ? "ধরনের ডিজিটাল সেবা" : "digital services"}</div>
               </div>
@@ -48,7 +48,7 @@ export default function Hero({ lang, serviceCount, onExplore }) {
                 {heroIcons.map((Icon, index) => (
                   <div key={index} className="orbit-icon" style={{ "--orbit-index": index, "--orbit-delay": `${index * 0.18}s` }}><Icon size={24} strokeWidth={1.9} /></div>
                 ))}
-                <div className="orbit-core"><img src="/logo.PNG" alt="NextGen e-Service Center" className="orbit-logo" /></div>
+                <div className="orbit-core"><img src="/logo.PNG" alt="Nagorik  Computer & e-Service" className="orbit-logo" /></div>
               </div>
               <div className="mt-4 rounded-2xl bg-[#07334a] p-5 text-white">
                 <div className="text-sm font-semibold text-[#9ce9d9]">{lang === "bn" ? "এক ছাদের নিচে" : "Under one roof"}</div>

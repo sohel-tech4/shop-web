@@ -17,7 +17,7 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
             <img src="/logo.PNG" alt={BUSINESS.name} className="h-12 w-12 rounded-full object-contain shadow-sm" />
             <div className="hidden sm:block">
               <div className="text-base font-extrabold tracking-tight brand-title sm:text-lg">
-                NextGen <span className="brand-accent">e-Service Center</span>
+                Nagorik  <span className="brand-accent">Computer & e-Service</span>
               </div>
               <div className="text-xs font-medium text-slate-500">{lang === "bn" ? BUSINESS.taglineBn : BUSINESS.taglineEn}</div>
             </div>

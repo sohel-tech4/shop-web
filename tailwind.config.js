@@ -12,7 +12,7 @@ export default {
   daisyui: {
     themes: [
       {
-        nextgen: {
+        Nagorik : {
           "primary": "#0f5f86",
           "secondary": "#10a7a0",
           "accent": "#8fe6d0",

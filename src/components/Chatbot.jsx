@@ -11,8 +11,8 @@ import {
 
 const getGreeting = (lang) =>
   lang === "en"
-    ? "Hello! 👋 Welcome to NextGen e-Service Center. How can I help you today? You can ask about our services and required documents."
-    : "আসসালামু আলাইকুম! 👋 NextGen e-Service Center-এ স্বাগতম। কীভাবে সাহায্য করতে পারি? আমাদের সার্ভিস ও প্রয়োজনীয় কাগজপত্র সম্পর্কে জানতে পারেন।";
+    ? "Hello! 👋 Welcome to Nagorik  Computer & e-Service. How can I help you today? You can ask about our services and required documents."
+    : "আসসালামু আলাইকুম! 👋 Nagorik  Computer & e-Service-এ স্বাগতম। কীভাবে সাহায্য করতে পারি? আমাদের সার্ভিস ও প্রয়োজনীয় কাগজপত্র সম্পর্কে জানতে পারেন।";
 
 export default function Chatbot({ lang = "bn" }) {
   const [open, setOpen] = useState(false);
@@ -150,7 +150,7 @@ export default function Chatbot({ lang = "bn" }) {
       {open && (
         <section
           className="ng-chat-panel"
-          aria-label="NextGen AI chat"
+          aria-label="Nagorik  AI chat"
           role="dialog"
           aria-modal="false"
         >
@@ -160,7 +160,7 @@ export default function Chatbot({ lang = "bn" }) {
             </div>
 
             <div className="ng-chat-heading">
-              <strong>NextGen Assistant</strong>
+              <strong>Nagorik  Assistant</strong>
               <span>
                 <i />
                 {lang === "en"
@@ -301,8 +301,8 @@ export default function Chatbot({ lang = "bn" }) {
               ? "Close assistant"
               : "চ্যাট বন্ধ করুন"
             : lang === "en"
-              ? "Chat with NextGen"
-              : "NextGen-এর সঙ্গে চ্যাট করুন"
+              ? "Chat with Nagorik "
+              : "Nagorik -এর সঙ্গে চ্যাট করুন"
         }
       >
         {open ? (

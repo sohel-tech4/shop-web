@@ -85,11 +85,6 @@ export const services = [
     requirementsBn: ["প্রোডাক্টের পরিষ্কার ছবি", "প্রোডাক্টের নাম, দাম ও অফারের তথ্য", "দোকান/ব্র্যান্ডের নাম ও লোগো (যদি থাকে)", "মোবাইল নম্বর, Facebook Page বা অন্যান্য যোগাযোগের তথ্য", "পছন্দের রঙ/ডিজাইনের নমুনা (যদি থাকে)", "পোস্টারের প্রয়োজনীয় সাইজ/প্ল্যাটফর্ম—Facebook, Instagram, WhatsApp ইত্যাদি"],
     requirementsEn: ["Clear product photos", "Product name, price and offer details", "Shop/brand name and logo if available", "Phone number, Facebook Page or other contact details", "Preferred colors/design reference if available", "Required size/platform such as Facebook, Instagram or WhatsApp"]
   },
-  // {
-  //   id: "land-tax", category: "Tax & Land", icon: "🌾", bn: "ভূমি সেবা", en: "Land Service",
-  //   descBn: "জমির খাজনা/ভূমি উন্নয়ন কর সংক্রান্ত অনলাইন সহায়তা।", descEn: "Online assistance for land development tax and related services.",
-  //   requirementsBn: ["খতিয়ান/দাগের তথ্য", "জমির মালিকের তথ্য", "NID তথ্য", "প্রয়োজনীয় জমির কাগজপত্র"], requirementsEn: ["Khatian/plot information", "Landowner information", "NID information", "Required land documents"]
-  // },
   {
     id: "land-tax",
     category: "Tax & Land",
@@ -231,4 +226,41 @@ export const services = [
     requirementsBn: ["শিক্ষার্থীর নাম ও মোবাইল নম্বর", "কম্পিউটার শেখার বর্তমান স্তর", "প্রশিক্ষণের আগ্রহের বিষয়", "গ্রাফিক্স, MS Office, বাংলা/ইংরেজি টাইপিং, অনলাইন আবেদন, PDF, CV, ছবি এডিটিং, প্রিন্ট/স্ক্যানসহ প্রয়োজনীয় কাজ শেখানো হবে"], requirementsEn: ["Name and mobile number", "Current computer skill level", "Preferred training topics", "Graphics, MS Office, Bangla/English typing, online applications, PDF, CV, photo editing, printing/scanning and other practical tasks"]
   }
 
+,
+  {
+    id: "photocopy", category: "Print & Media", icon: "📄",
+    bn: "ফটোকপি", en: "Photocopy",
+    descBn: "প্রয়োজনীয় ডকুমেন্টের সাদা-কালো ও রঙিন ফটোকপি।", descEn: "Black-and-white and color photocopying for documents.",
+    requirementsBn: ["ফটোকপি করার মূল কাগজ বা পরিষ্কার ফাইল", "প্রয়োজনীয় কপির সংখ্যা"], requirementsEn: ["Original document or clear file", "Required number of copies"]
+  },
+  {
+    id: "photo-print", category: "Print & Media", icon: "🖼️",
+    bn: "ছবি প্রিন্ট", en: "Photo Printing",
+    descBn: "বিভিন্ন সাইজে মানসম্মত ছবি প্রিন্ট।", descEn: "Quality photo printing in different sizes.",
+    requirementsBn: ["প্রিন্টের জন্য ডিজিটাল ছবি", "ছবির সাইজ ও কপির সংখ্যা"], requirementsEn: ["Digital photo file", "Required photo size and number of copies"]
+  },
+  {
+    id: "driving-license", category: "Government", icon: "🚗",
+    bn: "ড্রাইভিং লাইসেন্স", en: "Driving Licence",
+    descBn: "লার্নার ও ড্রাইভিং লাইসেন্স-সংক্রান্ত অনলাইন আবেদন সহায়তা।", descEn: "Online assistance for learner and driving licence applications.",
+    requirementsBn: ["জাতীয় পরিচয়পত্র", "মোবাইল নম্বর", "প্রয়োজনীয় ছবি ও ঠিকানার তথ্য", "প্রযোজ্য ক্ষেত্রে মেডিকেল সার্টিফিকেট ও অন্যান্য কাগজপত্র"], requirementsEn: ["National ID", "Mobile number", "Required photo and address details", "Medical certificate and other documents where applicable"]
+  },
+  {
+    id: "deed-writing", category: "Computer", icon: "📝",
+    bn: "যাবতীয় দলিল ও চুক্তিপত্র লেখা", en: "Deed & Agreement Typing",
+    descBn: "বিভিন্ন দলিল, চুক্তিপত্র ও আবেদনপত্র কম্পোজ ও ফরম্যাটিং।", descEn: "Typing and formatting deeds, agreements and applications.",
+    requirementsBn: ["মূল তথ্য ও খসড়া/নমুনা", "সংশ্লিষ্ট ব্যক্তি ও সম্পত্তির সঠিক তথ্য", "প্রয়োজনীয় কাগজপত্র"], requirementsEn: ["Source details and draft/sample", "Accurate details of relevant people and property", "Supporting documents"]
+  },
+  {
+    id: "writing", category: "Computer", icon: "✍️",
+    bn: "প্রশ্নপত্রসহ যাবতীয় লেখালেখি", en: "Question Papers & General Writing",
+    descBn: "প্রশ্নপত্র, দরখাস্ত, আবেদন, নোটিশ ও অন্যান্য লেখালেখি কম্পোজ।", descEn: "Typing and formatting question papers, applications, notices and other documents.",
+    requirementsBn: ["লেখার বিষয়বস্তু বা নির্দেশনা", "প্রয়োজনীয় ফরম্যাট ও পৃষ্ঠা সংখ্যা"], requirementsEn: ["Content or instructions", "Required format and page count"]
+  },
+  {
+    id: "laminating-spiral", category: "Print & Media", icon: "📚",
+    bn: "লেমিনেটিং / স্পাইরাল", en: "Lamination / Spiral Binding",
+    descBn: "ডকুমেন্ট, সার্টিফিকেট ও প্রজেক্টের লেমিনেটিং এবং স্পাইরাল বাইন্ডিং।", descEn: "Lamination and spiral binding for documents, certificates and projects.",
+    requirementsBn: ["লেমিনেট/বাইন্ডিং করার কাগজ বা ডকুমেন্ট", "প্রয়োজনীয় সাইজ ও কপি সংখ্যা"], requirementsEn: ["Documents or pages to laminate/bind", "Required size and number of copies"]
+  }
 ];

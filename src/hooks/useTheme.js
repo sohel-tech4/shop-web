@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export function useTheme() {
   const [darkMode, setDarkMode] = useState(() => {
     try {
-      const savedTheme = localStorage.getItem("nextgen-theme");
+      const savedTheme = localStorage.getItem("Nagorik -theme");
       return savedTheme ? savedTheme === "dark" : true;
     } catch {
       return true;
@@ -12,7 +12,7 @@ export function useTheme() {
 
   useEffect(() => {
     try {
-      localStorage.setItem("nextgen-theme", darkMode ? "dark" : "light");
+      localStorage.setItem("Nagorik -theme", darkMode ? "dark" : "light");
     } catch {}
   }, [darkMode]);
 
