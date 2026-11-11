@@ -44,9 +44,9 @@ export const services = [
     ]
   },
   {
-    id: "nid", category: "Government", icon: "🪪", bn: "জাতীয় পরিচয়পত্র সংক্রান্ত অনলাইন সেবা", en: "NID Online Services",
-    descBn: "এনআইডি সংশোধন, ডাউনলোড, তথ্য যাচাই ও অন্যান্য অনলাইন সহায়তা।", descEn: "Online assistance for NID correction, download, verification and more.",
-    requirementsBn: ["এনআইডি নম্বর/কার্ডের তথ্য", "জন্মতারিখ", "মোবাইল নম্বর", "সংশোধনের ক্ষেত্রে প্রমাণপত্র/সহায়ক কাগজপত্র"], requirementsEn: ["NID/card information", "Date of birth", "Mobile number", "Supporting documents for correction when required"]
+    id: "nid", category: "Government", icon: "🪪", bn: "NID সংক্রান্ত অনলাইন সেবা", en: "NID Online Services",
+    descBn: "NID সংশোধন, ডাউনলোড, তথ্য যাচাই ও অন্যান্য অনলাইন সহায়তা।", descEn: "Online assistance for NID correction, download, verification and more.",
+    requirementsBn: ["NID নম্বর/কার্ডের তথ্য", "জন্মতারিখ", "মোবাইল নম্বর", "সংশোধনের ক্ষেত্রে প্রমাণপত্র/সহায়ক কাগজপত্র"], requirementsEn: ["NID/card information", "Date of birth", "Mobile number", "Supporting documents for correction when required"]
   },
   {
     id: "birth", category: "Government", icon: "📜", bn: "জন্ম নিবন্ধন", en: "Birth Registration",
@@ -54,8 +54,8 @@ export const services = [
     requirementsBn: ["জন্মের প্রমাণপত্র—টিকার কার্ড/স্কুলের প্রত্যয়নপত্র", "পিতা-মাতার জন্মনিবন্ধন ও জাতীয় পরিচয়পত্রের ফটোকপি", "বিদ্যুৎ বিল/গ্যাস বিল/পানির বিল", "প্রয়োজনীয় ঠিকানা ও মোবাইল নম্বর"], requirementsEn: ["Proof of birth such as vaccination card/school certificate", "Copies of parents' Birth Registration and NID", "Electricity/gas/water bill", "Required address and mobile number"]
   },
   {
-    id: "passport", category: "Government", icon: "🛂", bn: "ই-পাসপোর্ট আবেদন সহায়তা", en: "e-Passport Application",
-    descBn: "ই-পাসপোর্ট অনলাইন আবেদন পূরণ ও আবেদন প্রক্রিয়ায় সহায়তা।", descEn: "Online e-Passport application filling and process assistance.",
+    id: "passport", category: "Government", icon: "🛂", bn: "e-Passport আবেদন সহায়তা", en: "e-Passport Application",
+    descBn: "e-Passport অনলাইন আবেদন পূরণ ও আবেদন প্রক্রিয়ায় সহায়তা।", descEn: "Online e-Passport application filling and process assistance.",
     requirementsBn: ["জাতীয় পরিচয়পত্র (প্রাপ্তবয়স্ক) / জন্মনিবন্ধন সনদ (অপ্রাপ্তবয়স্ক)", "পিতা ও মাতার জাতীয় পরিচয়পত্রের ফটোকপি", "স্বামী/স্ত্রীর জাতীয় পরিচয়পত্রের ফটোকপি (প্রযোজ্য ক্ষেত্রে)", "ম্যারিজ সার্টিফিকেট/কাবিননামার ফটোকপি (প্রযোজ্য ক্ষেত্রে)", "বিদ্যুৎ বিল/গ্যাস বিল/পানির বিল", "ইউনিয়ন পরিষদ বা সিটি কর্পোরেশন সনদ (ঐচ্ছিক)", "স্কুল/কলেজ আইডি কার্ড (ছাত্র/ছাত্রীদের ক্ষেত্রে)", "অফিস আইডি কার্ড (চাকরিজীবীদের ক্ষেত্রে)", "ট্রেড লাইসেন্স (ব্যবসায়ীদের ক্ষেত্রে)", "অতিরিক্ত কাগজপত্র—যদি প্রযোজ্য হয়"], requirementsEn: ["NID for adults / Birth Registration for minors", "Copies of father's and mother's NID", "Spouse's NID copy when applicable", "Marriage certificate/Kabin Nama copy when applicable", "Electricity/gas/water bill", "Union Parishad/City Corporation certificate if applicable", "School/college ID for students", "Office ID for employees", "Trade license for business owners", "Additional documents when applicable"]
   },
   {

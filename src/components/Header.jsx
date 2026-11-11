@@ -1,10 +1,12 @@
 import { Globe2, Menu, Moon, Sun, X } from "lucide-react";
 import { BUSINESS } from "../config";
 
-export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMenu, setMobileMenu }) {
+export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMenu, setMobileMenu, onShowArticles }) {
   const navItems = [
     ["#home", lang === "bn" ? "হোম" : "Home"],
     ["#services", lang === "bn" ? "সেবাসমূহ" : "Services"],
+    ["#articles", lang === "bn" ? "আর্টিকেল" : "Articles"],
+    ["#reviews", lang === "bn" ? "রিভিউ" : "Reviews"],
     ["#about", lang === "bn" ? "কেন আমরা" : "Why Us"],
     ["#contact", lang === "bn" ? "যোগাযোগ" : "Contact"],
   ];
@@ -26,7 +28,7 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
 
         <div className="navbar-end gap-2">
           <nav className="hidden items-center gap-1 md:flex">
-            {navItems.map(([href, label]) => <a key={href} href={href} className="btn btn-ghost btn-sm">{label}</a>)}
+            {navItems.map(([href, label]) => <a key={href} href={href} onClick={href === "#articles" ? onShowArticles : undefined} className="btn btn-ghost btn-sm">{label}</a>)}
           </nav>
 
           <button className="btn btn-sm border-0 bg-slate-100" onClick={() => setLang(lang === "bn" ? "en" : "bn")} aria-label="Change language">
@@ -48,7 +50,7 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
         <div className="mobile-nav border-t px-5 py-3 md:hidden">
           <div className="flex flex-col gap-1">
             {navItems.map(([href, label]) => (
-              <a key={href} onClick={() => setMobileMenu(false)} href={href} className="rounded-xl px-3 py-2">{label}</a>
+              <a key={href} onClick={() => { setMobileMenu(false); if (href === "#articles") onShowArticles?.(); }} href={href} className="rounded-xl px-3 py-2">{label}</a>
             ))}
           </div>
         </div>

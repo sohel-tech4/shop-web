@@ -632,3 +632,28 @@ footer .text-white\/45 {
     transform: scale(0.985);
   }
 }
+
+/* Articles, reading pages and customer feedback */
+.ng-content-section { scroll-margin-top: 88px; }
+.ng-eyebrow { display: inline-flex; align-items: center; gap: 7px; border: 1px solid #bce9df; border-radius: 999px; background: #effcf8; padding: 7px 13px; color: #087e76; font-size: 11px; font-weight: 800; letter-spacing: .06em; }
+.ng-article-card { display: block; min-width: 0; overflow: hidden; border: 1px solid #e7edf0; border-radius: 18px; background: #fff; box-shadow: 0 5px 18px rgba(20,55,65,.045); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.ng-article-card:hover { transform: translateY(-4px); border-color: #a8ddd4; box-shadow: 0 14px 30px rgba(20,90,90,.11); }
+.ng-article-image { position: relative; height: 125px; overflow: hidden; background: #e8f1f1; }
+.ng-article-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+.ng-article-card:hover .ng-article-image img { transform: scale(1.05); }
+.ng-article-image span { position: absolute; left: 9px; top: 9px; border-radius: 999px; background: rgba(255,255,255,.94); padding: 4px 8px; color: #087e76; font-size: 9px; font-weight: 800; }
+.ng-article-title { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; color: #18313b; font-size: 13px; font-weight: 850; line-height: 1.55; }
+.ng-article-excerpt { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; margin-top: 7px; color: #71808a; font-size: 11px; line-height: 1.7; }
+.ng-review-card { min-width: 0; border: 1px solid #e7edf0; border-radius: 18px; background: #fff; padding: 13px; box-shadow: 0 5px 18px rgba(20,55,65,.04); }
+.ng-article-detail { min-height: 65vh; background: linear-gradient(180deg,#f7fbfb 0%,#fff 360px); }
+.dark-mode .ng-content-section { background-color: #10252c; }
+.dark-mode .ng-article-card, .dark-mode .ng-review-card { border-color: #314b55; background: #17323b; }
+.dark-mode .ng-article-title, .dark-mode .ng-review-card h3 { color: #edf7f8; }
+.dark-mode .ng-article-excerpt, .dark-mode .ng-review-card p { color: #bdcbd0; }
+.dark-mode .ng-article-detail { background: linear-gradient(180deg,#10252c 0%,#142b33 360px); }
+.dark-mode .ng-article-detail h1, .dark-mode .ng-article-detail h2 { color: #f1f8fa; }
+.dark-mode .ng-article-detail article > p, .dark-mode .ng-article-detail article .text-slate-700, .dark-mode .ng-article-detail article .text-slate-600 { color: #c4d3d9; }
+.dark-mode .ng-article-detail button { border-color: #38545e; color: #d8e7eb; }
+.dark-mode .ng-eyebrow { border-color: #315e5a; background: #173b3a; color: #91e2d3; }
+@media (min-width: 640px) { .ng-article-image { height: 190px; } .ng-article-title { font-size: 16px; } .ng-article-excerpt { font-size: 13px; } .ng-review-card { padding: 20px; } }
+@media (max-width: 380px) { .ng-article-card, .ng-review-card { border-radius: 14px; } .ng-article-image { height: 105px; } .ng-article-title { font-size: 11px; } .ng-article-excerpt { font-size: 10px; } .ng-review-card { padding: 10px; } }
