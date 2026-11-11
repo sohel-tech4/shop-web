@@ -14,7 +14,7 @@ export const BUSINESS = {
   email: "dhaka2627@gmail.com",
 
   facebook:
-    "https://www.facebook.com/Nagorik service247"
+    "https://www.facebook.com/Nagorikcomputer"
 };
 
 export const getWhatsAppUrl = (serviceName = "") => {

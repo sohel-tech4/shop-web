@@ -37,13 +37,14 @@ body {
   background: rgba(255, 255, 255, 0.94);
   padding: 1.35rem;
   box-shadow: 0 8px 28px rgba(7, 51, 74, 0.05);
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
 .service-card:hover {
-  transform: translateY(-4px);
-  border-color: #bdebe2;
-  box-shadow: 0 18px 40px rgba(7, 51, 74, 0.10);
+  background: #eafaf6 !important;
+  transform: translateY(-5px);
+  border-color: #8fd8cb;
+  box-shadow: 0 18px 40px rgba(7, 51, 74, 0.13);
 }
 
 .service-icon {
@@ -226,8 +227,9 @@ body {
 }
 
 .dark-mode .service-card:hover {
-  border-color: #2b8d87;
-  box-shadow: 0 18px 40px rgba(0,0,0,.28);
+  background: #1a3b3d !important;
+  border-color: #4ca99e;
+  box-shadow: 0 18px 40px rgba(0,0,0,.32);
 }
 
 .dark-mode .service-card .text-\[\#07334a\] {
@@ -608,4 +610,25 @@ footer .text-white\/70 {
 }
 footer .text-white\/45 {
   color: #b7c8d1 !important;
+}
+
+
+/* Soft full-card feedback for mouse, keyboard and touch interactions */
+.service-card:active,
+.service-card:focus-visible {
+  background: #eafaf6 !important;
+  border-color: #9cddd2 !important;
+  box-shadow: 0 12px 30px rgba(21, 159, 155, 0.14) !important;
+  outline: none;
+}
+.dark-mode .service-card:active,
+.dark-mode .service-card:focus-visible {
+  background: #1a3b3d !important;
+  border-color: #4ca99e !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24) !important;
+}
+@media (hover: none) {
+  .service-card:active {
+    transform: scale(0.985);
+  }
 }

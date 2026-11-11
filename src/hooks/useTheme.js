@@ -4,9 +4,9 @@ export function useTheme() {
   const [darkMode, setDarkMode] = useState(() => {
     try {
       const savedTheme = localStorage.getItem("Nagorik -theme");
-      return savedTheme ? savedTheme === "dark" : true;
+      return savedTheme ? savedTheme === "dark" : false;
     } catch {
-      return true;
+      return false;
     }
   });
 
