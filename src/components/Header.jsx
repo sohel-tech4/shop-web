@@ -2,7 +2,7 @@ import { Globe2, Menu, Moon, Sun, X, ChevronDown, LogIn, LayoutDashboard, UserRo
 import React from "react";
 import { BUSINESS } from "../config";
 
-export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMenu, setMobileMenu, onShowArticles, onLogin, onLogout, onOpenApplications, authUser }) {
+export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMenu, setMobileMenu, onShowArticles, onLogin, onLogout, authUser }) {
   const [settingsOpen, setSettingsOpen] = React.useState(false);
   const settingsRef = React.useRef(null);
   const navItems = [
@@ -12,7 +12,6 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
     ["#reviews", lang === "bn" ? "রিভিউ" : "Reviews"],
     ["#about", lang === "bn" ? "কেন আমরা" : "Why Us"],
     ["#contact", lang === "bn" ? "যোগাযোগ" : "Contact"],
-    ["#apply", lang === "bn" ? "আবেদন / ট্র্যাকিং" : "Apply / Track"],
   ];
 
   // Keep the menu open while changing language/theme; close only on outside click or Escape.
@@ -93,7 +92,7 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
 
         <div className="navbar-end gap-2">
           <nav className="hidden items-center gap-1 md:flex">
-            {navItems.map(([href, label]) => <a key={href} href={href} onClick={(event) => { if (href === "#articles") onShowArticles?.(); if (href === "#apply") { event.preventDefault(); onOpenApplications?.(); } }} className={`btn btn-ghost btn-sm ${href === "#apply" ? "application-nav-link" : ""}`}>{label}</a>)}
+            {navItems.map(([href, label]) => <a key={href} href={href} onClick={() => { if (href === "#articles") onShowArticles?.(); }} className="btn btn-ghost btn-sm">{label}</a>)}
           </nav>
 
           {/* Desktop settings dropdown */}
@@ -124,7 +123,7 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
       <div id="main-mobile-navigation" className={`mobile-nav md:hidden ${mobileMenu ? "is-open" : ""}`} aria-hidden={!mobileMenu}>
         <div className="mobile-nav-inner px-5 py-3">
           <div className="flex flex-col gap-1">
-            {navItems.map(([href, label], index) => <a key={href} style={{ "--mobile-nav-index": index }} onClick={(event) => { setMobileMenu(false); if (href === "#articles") onShowArticles?.(); if (href === "#apply") { event.preventDefault(); onOpenApplications?.(); } }} href={href} tabIndex={mobileMenu ? 0 : -1} className="mobile-nav-link rounded-xl px-3 py-2">{label}</a>)}
+            {navItems.map(([href, label], index) => <a key={href} style={{ "--mobile-nav-index": index }} onClick={() => { setMobileMenu(false); if (href === "#articles") onShowArticles?.(); }} href={href} tabIndex={mobileMenu ? 0 : -1} className="mobile-nav-link rounded-xl px-3 py-2">{label}</a>)}
           </div>
           <div className="mobile-account-settings mt-3 border-t pt-3">
             <p className="mobile-settings-heading">{lang === "bn" ? "অ্যাকাউন্ট ও সেটিংস" : "Account & Settings"}</p>

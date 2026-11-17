@@ -151,7 +151,7 @@ export default function App() {
       <span className="logout-success-icon">✓</span>
       <span><strong>{lang === "bn" ? "লগআউট সফল হয়েছে!" : "Logged out successfully!"}</strong><small>{lang === "bn" ? "আপনি নিরাপদে আপনার অ্যাকাউন্ট থেকে বের হয়েছেন।" : "You have safely signed out of your account."}</small></span>
     </div>}
-    <Header lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} onShowArticles={showArticles} onOpenApplications={() => setShowApplications(true)} onLogin={() => authUser ? navigate(authUser.role === "admin" ? "/admin" : "/dashboard") : setShowAuth(true)} onLogout={handleLogout} authUser={authUser} />
+    <Header lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} onShowArticles={showArticles} onLogin={() => authUser ? navigate(authUser.role === "admin" ? "/admin" : "/dashboard") : setShowAuth(true)} onLogout={handleLogout} authUser={authUser} />
     <main id="home">
       {selectedArticle ? <ArticleDetail lang={lang} article={selectedArticle} onBack={() => { setSelectedArticle(null); requestAnimationFrame(() => document.getElementById("articles")?.scrollIntoView({ behavior: "smooth" })); }} relatedArticles={articles.filter((item) => item.id !== selectedArticle.id).slice(0, 3)} onSelect={openArticle} /> : <>
         <Hero lang={lang} serviceCount={services.length} onExplore={scrollToServices} />
