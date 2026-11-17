@@ -21,3 +21,15 @@ Run `npm run build`.
 - Other visitors can create an account with Sign Up, then log in to the User Dashboard.
 - Demo accounts are stored in the current browser's localStorage; the login session uses sessionStorage. Accounts do not sync across devices or browsers.
 - **Security warning:** this frontend-only demo is not production authentication. The admin credential can be discovered from the built JavaScript. Do not use it to protect private data or real admin actions. For production, connect a server-side auth/database service and enforce admin roles on the server.
+
+## নতুন ফিচার: অনলাইন আবেদন ও Tracking
+
+- মূল ওয়েবসাইটের Header থেকে **আবেদন / ট্র্যাকিং** খুলে নতুন সার্ভিস অনুরোধ জমা দেওয়া যায়।
+- আবেদন জমা হলে `NG-YYYYMMDD-XXXX` ফরম্যাটে Tracking ID তৈরি হয়।
+- Tracking ID এবং আবেদনের মোবাইল নম্বর দিয়ে আবেদনকারী স্ট্যাটাস দেখতে পারেন।
+- Dashboard-এর **আমার আবেদন** বিভাগে লগইন করা গ্রাহকের ইমেইলের সঙ্গে যুক্ত আবেদন দেখা যায়।
+- Admin Dashboard-এর **আবেদন ব্যবস্থাপনা** বিভাগে আবেদন খোঁজা, Pending/Processing/Completed/Rejected স্ট্যাটাস বদলানো এবং গ্রাহকের জন্য নোট সংরক্ষণ করা যায়।
+
+### ডেটা সংরক্ষণ সংক্রান্ত গুরুত্বপূর্ণ সীমাবদ্ধতা
+
+এই সংস্করণে আবেদনগুলো ব্রাউজারের `localStorage`-এ সংরক্ষিত হয়। তাই একই ব্রাউজার/ডিভাইসে ডেমো ও প্রাথমিক পরীক্ষা করা যাবে; অন্য গ্রাহকের ডিভাইস থেকে আবেদন সরাসরি Admin Dashboard-এ দেখা যাবে না। বাস্তব ব্যবহারের আগে Firebase Firestore/নিরাপদ API বা সার্ভার ডেটাবেস, Authentication Rules, validation, rate limiting এবং private document storage যুক্ত করতে হবে। গ্রাহকদের NID/পাসপোর্ট নম্বর, পাসওয়ার্ড বা সংবেদনশীল ডকুমেন্ট এই প্রাথমিক ফর্মে সংগ্রহ করা হয় না।

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import ApplicationsDashboard from "./ApplicationsDashboard";
 import { Activity, BarChart3, Bell, ChevronRight, FileText, LayoutDashboard, LogOut, Menu, MessageSquare, Settings, ShieldCheck, Users, BriefcaseBusiness, Globe, Search, UserRound, Globe2, Moon, Sun, ChevronDown, X } from "lucide-react";
 
 export default function DashboardPage({ user, isAdmin, lang = "bn", setLang, darkMode = false, setDarkMode, onLogout, onHome }) {
@@ -18,6 +19,7 @@ export default function DashboardPage({ user, isAdmin, lang = "bn", setLang, dar
   const items = isAdmin ? [
     { id: "overview", label: tr("ড্যাশবোর্ড", "Dashboard"), icon: LayoutDashboard },
     { id: "users", label: tr("ব্যবহারকারী", "Users"), icon: Users },
+    { id: "applications", label: tr("আবেদন ব্যবস্থাপনা", "Applications"), icon: FileText },
     { id: "services", label: tr("সার্ভিস ব্যবস্থাপনা", "Service Management"), icon: BriefcaseBusiness },
     { id: "reviews", label: tr("রিভিউ ও কনটেন্ট", "Reviews & Content"), icon: MessageSquare },
     { id: "reports", label: tr("রিপোর্ট", "Reports"), icon: BarChart3 },
@@ -57,7 +59,7 @@ export default function DashboardPage({ user, isAdmin, lang = "bn", setLang, dar
         </div>
       </header>
       <section className="ng-dash-content">
-        {active === "overview" ? <>
+        {active === "applications" ? <ApplicationsDashboard user={user} isAdmin={isAdmin} lang={lang}/> : active === "overview" ? <>
           <div className="ng-dash-welcome"><div><span>{isAdmin ? tr("অ্যাডমিন কন্ট্রোল সেন্টার", "ADMIN CONTROL CENTER") : tr("আমার অ্যাকাউন্ট", "MY ACCOUNT")}</span><h2>{tr("স্বাগতম", "Welcome")}, {user.displayName || user.email?.split("@")[0]}!</h2><p>{isAdmin ? tr("আপনার ওয়েবসাইট পরিচালনার সংক্ষিপ্ত বিবরণ এখানে দেখুন।", "View a quick overview of your website management here.") : tr("আপনার অ্যাকাউন্ট ও সেবার তথ্য এখান থেকে পরিচালনা করুন।", "Manage your account and service information here.")}</p></div><div className="ng-dash-welcome-mark"><Activity size={34}/></div></div>
           <div className="ng-dash-stat-grid">{(isAdmin ? [
             [tr("মোট ব্যবহারকারী", "Total Users"), "Firebase Auth", "users", Users], [tr("সার্ভিস", "Services"), tr("ওয়েবসাইটে প্রকাশিত", "Published on website"), "services", BriefcaseBusiness], [tr("রিভিউ", "Reviews"), tr("কনটেন্ট বিভাগ", "Content section"), "reviews", MessageSquare], [tr("অ্যাকাউন্ট স্ট্যাটাস", "Account Status"), tr("সক্রিয়", "Active"), "active", ShieldCheck],

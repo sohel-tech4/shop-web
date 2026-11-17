@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowRight, Search, ChevronDown, ChevronUp } from "lucide-react";
 import { categories, fallbackServiceIcon, serviceIcons } from "../data/ui";
 
-export default function ServicesSection({ lang, services, activeCategory, setActiveCategory, query, setQuery, onSelect }) {
+export default function ServicesSection({ lang, services, activeCategory, setActiveCategory, query, setQuery, onSelect, onApply }) {
   // Show 4 cards on phones/tablets and 8 on large screens, then reveal one batch at a time.
   const [batchSize, setBatchSize] = useState(() =>
     typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches ? 8 : 4
@@ -52,15 +52,20 @@ export default function ServicesSection({ lang, services, activeCategory, setAct
         {visibleServices.map((service) => {
           const Icon = serviceIcons[service.id] || fallbackServiceIcon;
           return (
-            <button key={service.id} onClick={() => onSelect(service)} className="service-card group text-left">
-              <div className="flex items-start justify-between gap-3">
-                <div className="service-icon"><Icon size={23} strokeWidth={1.9} /></div>
-                <ArrowRight size={18} className="mt-2 text-slate-300 transition group-hover:translate-x-1 group-hover:text-[#159f9b]" />
-              </div>
-              <div className="mt-5 text-lg font-bold text-[#07334a]">{lang === "bn" ? service.bn : service.en}</div>
-              <div className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">{lang === "bn" ? service.descBn : service.descEn}</div>
-              <div className="mt-5 text-xs font-bold text-[#159f9b]">{lang === "bn" ? "বিস্তারিত দেখুন →" : "View details →"}</div>
-            </button>
+            <article key={service.id} className="service-card group text-left">
+              <button type="button" onClick={() => onSelect(service)} className="block w-full text-left">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="service-icon"><Icon size={23} strokeWidth={1.9} /></div>
+                  <ArrowRight size={18} className="mt-2 text-slate-300 transition group-hover:translate-x-1 group-hover:text-[#159f9b]" />
+                </div>
+                <div className="mt-5 text-lg font-bold text-[#07334a]">{lang === "bn" ? service.bn : service.en}</div>
+                <div className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">{lang === "bn" ? service.descBn : service.descEn}</div>
+                <div className="mt-4 text-xs font-bold text-[#159f9b]">{lang === "bn" ? "বিস্তারিত দেখুন →" : "View details →"}</div>
+              </button>
+              <button type="button" onClick={() => onApply(service)} className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#07334a] px-3 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b5264] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#159f9b]/30">
+                {lang === "bn" ? `${service.bn} সেবা নিন` : `Get ${service.en} Service`}
+              </button>
+            </article>
           );
         })}
       </div>

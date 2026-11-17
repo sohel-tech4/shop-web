@@ -15,6 +15,7 @@ import ReviewsSection from "./components/ReviewsSection";
 import { articles, reviews } from "./data/articles";
 import DashboardPage from "./components/DashboardPage";
 import AuthPortal from "./components/AuthPortal";
+import ApplicationCenter from "./components/ApplicationCenter";
 
 const getRoute = () => window.location.pathname.replace(/\/+$/, "") || "/";
 const readSession = () => {
@@ -39,6 +40,8 @@ export default function App() {
   const [route, setRoute] = useState(getRoute);
   const [authUser, setAuthUser] = useState(readSession);
   const [showAuth, setShowAuth] = useState(false);
+  const [showApplications, setShowApplications] = useState(false);
+  const [applicationService, setApplicationService] = useState(null);
   const [showLoginSuccess, setShowLoginSuccess] = useState(false);
   const [showLogoutSuccess, setShowLogoutSuccess] = useState(false);
 
@@ -64,6 +67,13 @@ export default function App() {
   const handleAuthenticated = (user) => {
     setAuthUser(user);
     sessionStorage.setItem("nagorik_auth_user", JSON.stringify(user));
+    // If login was requested from a service card, continue directly to that service request.
+    if (applicationService) {
+      setShowAuth(false);
+      setShowApplications(true);
+      setShowLoginSuccess(false);
+      return;
+    }
     navigate(user.role === "admin" ? "/admin" : "/dashboard");
     setShowLoginSuccess(true);
   };
@@ -97,6 +107,15 @@ export default function App() {
   }, [activeCategory, query]);
 
   const openService = (service) => { setSelectedService(service); setVisaType(null); setLandServiceType(null); };
+  const startApplication = (service) => {
+    setSelectedService(null);
+    setApplicationService(service);
+    if (!authUser) {
+      setShowAuth(true);
+      return;
+    }
+    setShowApplications(true);
+  };
   const closeService = () => { setSelectedService(null); setVisaType(null); setLandServiceType(null); };
   const scrollToServices = () => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
   const showArticles = () => { setSelectedArticle(null); requestAnimationFrame(() => document.getElementById("articles")?.scrollIntoView({ behavior: "smooth" })); };
@@ -132,11 +151,11 @@ export default function App() {
       <span className="logout-success-icon">✓</span>
       <span><strong>{lang === "bn" ? "লগআউট সফল হয়েছে!" : "Logged out successfully!"}</strong><small>{lang === "bn" ? "আপনি নিরাপদে আপনার অ্যাকাউন্ট থেকে বের হয়েছেন।" : "You have safely signed out of your account."}</small></span>
     </div>}
-    <Header lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} onShowArticles={showArticles} onLogin={() => authUser ? navigate(authUser.role === "admin" ? "/admin" : "/dashboard") : setShowAuth(true)} onLogout={handleLogout} authUser={authUser} />
+    <Header lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} onShowArticles={showArticles} onOpenApplications={() => setShowApplications(true)} onLogin={() => authUser ? navigate(authUser.role === "admin" ? "/admin" : "/dashboard") : setShowAuth(true)} onLogout={handleLogout} authUser={authUser} />
     <main id="home">
       {selectedArticle ? <ArticleDetail lang={lang} article={selectedArticle} onBack={() => { setSelectedArticle(null); requestAnimationFrame(() => document.getElementById("articles")?.scrollIntoView({ behavior: "smooth" })); }} relatedArticles={articles.filter((item) => item.id !== selectedArticle.id).slice(0, 3)} onSelect={openArticle} /> : <>
         <Hero lang={lang} serviceCount={services.length} onExplore={scrollToServices} />
-        <ServicesSection lang={lang} services={filteredServices} activeCategory={activeCategory} setActiveCategory={setActiveCategory} query={query} setQuery={setQuery} onSelect={openService} />
+        <ServicesSection lang={lang} services={filteredServices} activeCategory={activeCategory} setActiveCategory={setActiveCategory} query={query} setQuery={setQuery} onSelect={openService} onApply={startApplication} />
         <AboutSection lang={lang} />
         <ArticlesSection lang={lang} articles={articles} onSelect={openArticle} />
         <ReviewsSection lang={lang} reviews={reviews} />
@@ -146,6 +165,7 @@ export default function App() {
     <Footer lang={lang} />
     <ServiceModal lang={lang} service={selectedService} visaType={visaType} setVisaType={setVisaType} landServiceType={landServiceType} setLandServiceType={setLandServiceType} onClose={closeService} />
     <Chatbot lang={lang} />
+    {showApplications && <ApplicationCenter lang={lang} user={authUser} initialService={applicationService} onClose={() => { setShowApplications(false); setApplicationService(null); }} />}
     {showAuth && <AuthPortal lang={lang} setLang={setLang} onClose={() => setShowAuth(false)} onAuthenticated={handleAuthenticated} />}
   </div>;
 }
