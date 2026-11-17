@@ -41,3 +41,6 @@ See `MONGODB-SETUP-BN.md` for the required Netlify environment variables and dep
 ## Routing
 
 এই প্রজেক্টে client-side navigation-এর জন্য `react-router-dom` (BrowserRouter, useNavigate, useLocation এবং Navigate) ব্যবহার করা হয়েছে। Netlify-তে direct route refresh কাজ করাতে SPA redirect rule (`/* /index.html 200`) কনফিগার থাকতে হবে।
+
+## সহজ ফ্রি WhatsApp ও Email নোটিফিকেশন
+`SIMPLE-NOTIFICATION-SETUP-BN.md` দেখুন। আবেদন জমা দিলে WhatsApp ও Email অ্যাপে পূরণ করা বার্তা খুলবে; গ্রাহককে Send চাপতে হবে।

@@ -67,9 +67,6 @@ export default function ServicesSection({ lang, services, activeCategory, setAct
                   </button>
                 </div>
               </button>
-              <button type="button" onClick={() => onApply(service)} className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#07334a] px-3 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b5264] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#159f9b]/30">
-                {lang === "bn" ? "সেবা নিন" : "Get Service"}
-              </button>
             </article>
           );
         })}

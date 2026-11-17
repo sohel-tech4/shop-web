@@ -265,9 +265,6 @@ export default function ServiceModal({
                       <div className="visa-option-link mt-4 text-xs font-bold">
                         {isBn ? "প্রয়োজনীয় কাগজপত্র দেখুন →" : "View requirements →"}
                       </div>
-                      <span className="mt-3 inline-flex rounded-lg bg-[#07334a] px-4 py-2 text-sm font-bold text-white">
-                        {isBn ? "সেবা নিন" : "Get Service"}
-                      </span>
                     </button>
                   );
                 })}
