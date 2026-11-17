@@ -5,7 +5,7 @@ const ADMIN_PROFILE_KEY = 'nagorik_admin_profile';
 // লোকাল-স্টোরেজ সংস্করণ: অ্যাডমিন পাসওয়ার্ডটি নিজের মতো পরিবর্তন করুন।
 // এটি ক্লায়েন্ট-সাইড ডেমো নিরাপত্তা; production-এ নিরাপদ নয়।
 const ADMIN_EMAIL = 'dhaka2627@gmail.com';
-const ADMIN_PASSWORD = 'ChangeThisAdminPassword!2026';
+const ADMIN_PASSWORD = '1010995982';
 
 const readUsers = () => {
   try {

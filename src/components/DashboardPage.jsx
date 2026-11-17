@@ -70,6 +70,7 @@ export default function DashboardPage({ user, isAdmin, lang = "bn", setLang, dar
   const toggleLanguage = () => setLang?.((value) => value === "bn" ? "en" : "bn");
   const toggleTheme = () => setDarkMode?.((value) => !value);
   return <div className={`ng-dashboard ${darkMode ? "ng-dashboard-dark" : "ng-dashboard-light"}`}>
+    {profileMessage && <div className="logout-success-toast" role="status" aria-live="polite"><span className="logout-success-icon">✓</span><span><strong>{profileMessage}</strong><small>{tr("আপনার নতুন তথ্য সেবা আবেদনে স্বয়ংক্রিয়ভাবে বসবে।", "Your updated details will be filled automatically in service requests.")}</small></span></div>}
     <aside className={`ng-dash-sidebar ${sidebarOpen ? "is-open" : ""}`}>
       <a href="/" className="ng-dash-brand ng-dash-brand-link" aria-label="Nagorik Computer & e-Service - মূল ওয়েবসাইট"><img src="/logo.PNG" alt="Nagorik Computer & e-Service logo"/><div><strong>NAGORIK</strong><span>Computer & e-Service</span></div></a>
       <div className="ng-dash-profile"><div className="ng-dash-avatar" style={profile.photo ? {backgroundImage:`url(${profile.photo})`,backgroundSize:"cover",backgroundPosition:"center",color:"transparent"} : {}}>{profile.photo ? "" : initials}</div><div className="min-w-0"><strong>{profile.displayName || tr("ব্যবহারকারী", "User")}</strong><span>{isAdmin ? "Administrator" : tr("সাধারণ ব্যবহারকারী", "Standard User")}</span></div></div>
@@ -106,7 +107,7 @@ export default function DashboardPage({ user, isAdmin, lang = "bn", setLang, dar
             <label className="grid gap-1 text-sm font-semibold">{tr("ইমেইল (পরিবর্তন করা যাবে না)", "Email (cannot be changed)")}<input value={user.email} disabled className="rounded-xl border bg-slate-100 p-3 text-slate-500"/></label>
             <label className="grid gap-1 text-sm font-semibold">{tr("মোবাইল নম্বর", "Phone number")}<input value={profile.phone || ""} onChange={(e) => setProfile((old) => ({...old,phone:e.target.value}))} className="rounded-xl border p-3" placeholder="01XXXXXXXXX"/></label>
             <label className="grid gap-1 text-sm font-semibold">{tr("সম্পূর্ণ ঠিকানা", "Full address")}<textarea rows="3" value={profile.address || ""} onChange={(e) => setProfile((old) => ({...old,address:e.target.value}))} className="rounded-xl border p-3" placeholder={tr("গ্রাম/মহল্লা, ডাকঘর, উপজেলা, জেলা", "Village/Area, Post Office, Upazila, District")}/></label>
-            {profileError && <p className="text-sm text-red-600">{profileError}</p>}{profileMessage && <p className="rounded-lg bg-emerald-50 p-3 text-emerald-700">{profileMessage}</p>}
+            {profileError && <p className="text-sm text-red-600">{profileError}</p>}
             <button type="submit" className="w-fit rounded-xl bg-teal-700 px-6 py-3 font-bold text-white">{tr("পরিবর্তন সংরক্ষণ করুন", "Save Changes")}</button>
           </form>
         </div> : active === "applications" ? <ApplicationsDashboard user={user} isAdmin={isAdmin} lang={lang}/> : active === "my-reviews" && !isAdmin ? <UserReviewsDashboard user={user} applications={completedApplications} reviews={serviceReviews} lang={lang} onSubmit={onSubmitServiceReview}/> : active === "overview" ? <>

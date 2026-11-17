@@ -7,7 +7,7 @@ export default function ApplicationCenter({ lang = "bn", user, initialService = 
   const bn = lang === "bn";
   const tr = (a,b) => bn ? a : b;
   const [name,setName] = useState(user?.displayName || "");
-  const [phone,setPhone] = useState("");
+  const [phone,setPhone] = useState(user?.phone || "");
   const [email] = useState(user?.email || "");
   const [serviceId,setServiceId] = useState(initialService?.id || "");
   const [details,setDetails] = useState(initialService ? (lang === "bn" ? initialService.descBn : initialService.descEn) : "");
