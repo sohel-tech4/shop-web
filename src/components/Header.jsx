@@ -31,6 +31,15 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
     };
   }, [settingsOpen]);
 
+  React.useEffect(() => {
+    if (!mobileMenu) return;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setMobileMenu(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [mobileMenu, setMobileMenu]);
+
   const accountLabel = authUser
     ? (lang === "bn" ? "ড্যাশবোর্ড" : "Dashboard")
     : (lang === "bn" ? "লগইন / অ্যাকাউন্ট" : "Login / Account");
@@ -105,27 +114,29 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
             </div>}
           </div>
 
-          <button className="btn btn-square btn-ghost md:hidden" onClick={() => setMobileMenu((open) => !open)} aria-label="Menu" aria-expanded={mobileMenu}>
+          <button className={`btn btn-square btn-ghost md:hidden mobile-menu-toggle ${mobileMenu ? "is-active" : ""}`} onClick={() => setMobileMenu((open) => !open)} aria-label={mobileMenu ? (lang === "bn" ? "মেনু বন্ধ করুন" : "Close menu") : (lang === "bn" ? "মেনু খুলুন" : "Open menu")} aria-expanded={mobileMenu} aria-controls="main-mobile-navigation">
             {mobileMenu ? <X /> : <Menu />}
           </button>
         </div>
       </div>
 
-      {mobileMenu && <div className="mobile-nav border-t px-5 py-3 md:hidden">
-        <div className="flex flex-col gap-1">
-          {navItems.map(([href, label]) => <a key={href} onClick={() => { setMobileMenu(false); if (href === "#articles") onShowArticles?.(); }} href={href} className="rounded-xl px-3 py-2">{label}</a>)}
-        </div>
-        <div className="mobile-account-settings mt-3 border-t pt-3">
-          <p className="mobile-settings-heading">{lang === "bn" ? "অ্যাকাউন্ট ও সেটিংস" : "Account & Settings"}</p>
-          {accountControl}
-          {logoutControl}
-          <div className="settings-divider" />
-          <div className="mobile-settings-grid">
-            {languageControl}
-            {themeControl}
+      <div id="main-mobile-navigation" className={`mobile-nav md:hidden ${mobileMenu ? "is-open" : ""}`} aria-hidden={!mobileMenu}>
+        <div className="mobile-nav-inner px-5 py-3">
+          <div className="flex flex-col gap-1">
+            {navItems.map(([href, label], index) => <a key={href} style={{ "--mobile-nav-index": index }} onClick={() => { setMobileMenu(false); if (href === "#articles") onShowArticles?.(); }} href={href} tabIndex={mobileMenu ? 0 : -1} className="mobile-nav-link rounded-xl px-3 py-2">{label}</a>)}
+          </div>
+          <div className="mobile-account-settings mt-3 border-t pt-3">
+            <p className="mobile-settings-heading">{lang === "bn" ? "অ্যাকাউন্ট ও সেটিংস" : "Account & Settings"}</p>
+            <div className="mobile-nav-account-item">{accountControl}</div>
+            {logoutControl && <div className="mobile-nav-account-item">{logoutControl}</div>}
+            <div className="settings-divider" />
+            <div className="mobile-settings-grid">
+              {languageControl}
+              {themeControl}
+            </div>
           </div>
         </div>
-      </div>}
+      </div>
     </header>
   );
 }

@@ -23,7 +23,11 @@ const readSession = () => {
 };
 
 export default function App() {
-  const [lang, setLang] = useState("bn");
+  // One shared language preference for the public site, auth screens and dashboard.
+  const [lang, setLang] = useState(() => {
+    try { return localStorage.getItem("Nagorik -language") === "en" ? "en" : "bn"; }
+    catch { return "bn"; }
+  });
   const [activeCategory, setActiveCategory] = useState("All");
   const [query, setQuery] = useState("");
   const [selectedService, setSelectedService] = useState(null);
@@ -36,6 +40,12 @@ export default function App() {
   const [authUser, setAuthUser] = useState(readSession);
   const [showAuth, setShowAuth] = useState(false);
   const [showLoginSuccess, setShowLoginSuccess] = useState(false);
+  const [showLogoutSuccess, setShowLogoutSuccess] = useState(false);
+
+  useEffect(() => {
+    try { localStorage.setItem("Nagorik -language", lang); } catch {}
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   const navigate = (path, replace = false) => {
     if (replace) window.history.replaceState({}, "", path);
@@ -60,7 +70,7 @@ export default function App() {
   // Login confirmation is intentionally brief; the dashboard is already rendered underneath.
   useEffect(() => {
     if (!showLoginSuccess) return undefined;
-    const timer = window.setTimeout(() => setShowLoginSuccess(false), 1600);
+    const timer = window.setTimeout(() => setShowLoginSuccess(false), 2200);
     return () => window.clearTimeout(timer);
   }, [showLoginSuccess]);
 
@@ -68,7 +78,14 @@ export default function App() {
     sessionStorage.removeItem("nagorik_auth_user");
     setAuthUser(null);
     navigate("/");
+    setShowLogoutSuccess(true);
   };
+
+  useEffect(() => {
+    if (!showLogoutSuccess) return undefined;
+    const timer = window.setTimeout(() => setShowLogoutSuccess(false), 2200);
+    return () => window.clearTimeout(timer);
+  }, [showLogoutSuccess]);
 
   const filteredServices = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -86,31 +103,35 @@ export default function App() {
   const openArticle = (article) => { setSelectedArticle(article); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
   if (route === "/admin" || route === "/dashboard") {
-    if (!authUser) return <AuthPortal onClose={() => navigate("/")} onAuthenticated={handleAuthenticated} />;
+    if (!authUser) return <AuthPortal lang={lang} setLang={setLang} onClose={() => navigate("/")} onAuthenticated={handleAuthenticated} />;
     const isAdmin = authUser.role === "admin";
     if ((route === "/admin") !== isAdmin) {
       window.history.replaceState({}, "", isAdmin ? "/admin" : "/dashboard");
       if (route !== (isAdmin ? "/admin" : "/dashboard")) setRoute(isAdmin ? "/admin" : "/dashboard");
     }
     return <>
-      <DashboardPage user={authUser} isAdmin={isAdmin} onLogout={handleLogout} onHome={() => navigate("/")} />
+      <DashboardPage user={authUser} isAdmin={isAdmin} lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} onLogout={handleLogout} onHome={() => navigate("/")} />
       {showLoginSuccess && <div className="login-success-overlay" role="dialog" aria-modal="true" aria-labelledby="login-success-title">
         <div className="login-success-card">
           <button className="login-success-close" onClick={() => setShowLoginSuccess(false)} aria-label="Close">×</button>
           <div className="login-success-orbit"><div className="login-success-check">✓</div><span className="success-spark spark-one">✦</span><span className="success-spark spark-two">✧</span><span className="success-spark spark-three">✦</span></div>
           <span className="login-success-kicker">NAGORIK COMPUTER & E-SERVICE</span>
-          <h2 id="login-success-title">{isAdmin ? "অ্যাডমিন লগইন সফল!" : "লগইন সফল হয়েছে!"}</h2>
-          <p className="login-success-welcome">স্বাগতম, <strong>{authUser.displayName || authUser.email}</strong></p>
-          <p className="login-success-description">{isAdmin ? "আপনি অ্যাডমিন হিসেবে প্রবেশ করেছেন। এখন ওয়েবসাইট পরিচালনা করতে পারবেন।" : "আপনি সফলভাবে আপনার অ্যাকাউন্টে প্রবেশ করেছেন। আপনার ড্যাশবোর্ড প্রস্তুত।"}</p>
-          <div className="login-success-role"><span>{isAdmin ? "🛡️" : "👤"}</span><div><small>ACCOUNT TYPE</small><strong>{isAdmin ? "Administrator" : "Registered User"}</strong></div><span className="login-success-active">সক্রিয়</span></div>
-          <div className="login-success-auto"><span className="login-success-progress" /><small>আপনার ড্যাশবোর্ড চালু হচ্ছে...</small></div>
-          <p className="login-success-foot">আপনার তথ্য সুরক্ষিত রাখুন • Nagorik e-Service</p>
+          <h2 id="login-success-title">{lang === "bn" ? (isAdmin ? "অ্যাডমিন লগইন সফল!" : "লগইন সফল হয়েছে!") : (isAdmin ? "Admin login successful!" : "Login successful!")}</h2>
+          <p className="login-success-welcome">{lang === "bn" ? "স্বাগতম," : "Welcome,"} <strong>{authUser.displayName || authUser.email}</strong></p>
+          <p className="login-success-description">{lang === "bn" ? (isAdmin ? "আপনি অ্যাডমিন হিসেবে প্রবেশ করেছেন। এখন ওয়েবসাইট পরিচালনা করতে পারবেন।" : "আপনি সফলভাবে আপনার অ্যাকাউন্টে প্রবেশ করেছেন। আপনার ড্যাশবোর্ড প্রস্তুত।") : (isAdmin ? "You are signed in as an administrator and can now manage the website." : "You have signed in successfully. Your dashboard is ready.")}</p>
+          <div className="login-success-role"><span>{isAdmin ? "🛡️" : "👤"}</span><div><small>{lang === "bn" ? "অ্যাকাউন্টের ধরন" : "ACCOUNT TYPE"}</small><strong>{isAdmin ? "Administrator" : "Registered User"}</strong></div><span className="login-success-active">{lang === "bn" ? "সক্রিয়" : "Active"}</span></div>
+          <div className="login-success-auto"><span className="login-success-progress" /><small>{lang === "bn" ? "আপনার ড্যাশবোর্ড চালু হচ্ছে..." : "Opening your dashboard..."}</small></div>
+          <p className="login-success-foot">{lang === "bn" ? "আপনার তথ্য সুরক্ষিত রাখুন" : "Keep your information secure"} • Nagorik e-Service</p>
         </div>
       </div>}
     </>;
   }
 
   return <div className={`min-h-screen text-slate-800 ${darkMode ? "dark-mode" : "light-mode"}`}>
+    {showLogoutSuccess && <div className="logout-success-toast" role="status" aria-live="polite">
+      <span className="logout-success-icon">✓</span>
+      <span><strong>{lang === "bn" ? "লগআউট সফল হয়েছে!" : "Logged out successfully!"}</strong><small>{lang === "bn" ? "আপনি নিরাপদে আপনার অ্যাকাউন্ট থেকে বের হয়েছেন।" : "You have safely signed out of your account."}</small></span>
+    </div>}
     <Header lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} onShowArticles={showArticles} onLogin={() => authUser ? navigate(authUser.role === "admin" ? "/admin" : "/dashboard") : setShowAuth(true)} onLogout={handleLogout} authUser={authUser} />
     <main id="home">
       {selectedArticle ? <ArticleDetail lang={lang} article={selectedArticle} onBack={() => { setSelectedArticle(null); requestAnimationFrame(() => document.getElementById("articles")?.scrollIntoView({ behavior: "smooth" })); }} relatedArticles={articles.filter((item) => item.id !== selectedArticle.id).slice(0, 3)} onSelect={openArticle} /> : <>
@@ -125,6 +146,6 @@ export default function App() {
     <Footer lang={lang} />
     <ServiceModal lang={lang} service={selectedService} visaType={visaType} setVisaType={setVisaType} landServiceType={landServiceType} setLandServiceType={setLandServiceType} onClose={closeService} />
     <Chatbot lang={lang} />
-    {showAuth && <AuthPortal onClose={() => setShowAuth(false)} onAuthenticated={handleAuthenticated} />}
+    {showAuth && <AuthPortal lang={lang} setLang={setLang} onClose={() => setShowAuth(false)} onAuthenticated={handleAuthenticated} />}
   </div>;
 }
