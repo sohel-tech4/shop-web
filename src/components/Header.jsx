@@ -47,7 +47,7 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
     ? (authUser.role === "admin" ? "Administrator" : (lang === "bn" ? "সাধারণ ব্যবহারকারী" : "User account"))
     : (lang === "bn" ? "আপনার অ্যাকাউন্টে প্রবেশ করুন" : "Sign in to your account");
   const AccountIcon = authUser ? LayoutDashboard : UserRound;
-  const profilePhoto = authUser?.photoURL || authUser?.photoUrl || authUser?.avatarUrl || authUser?.avatar || "";
+  const profilePhoto = authUser?.photo || authUser?.photoURL || authUser?.photoUrl || authUser?.avatarUrl || authUser?.avatar || "";
   const profileInitial = (authUser?.displayName || authUser?.email || "U").trim().charAt(0).toUpperCase();
 
   const languageControl = (

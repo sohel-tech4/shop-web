@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Search, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowRight, Search, ChevronDown, ChevronUp, Star } from "lucide-react";
 import { categories, fallbackServiceIcon, serviceIcons } from "../data/ui";
 
 export default function ServicesSection({ lang, services, activeCategory, setActiveCategory, query, setQuery, onSelect, onApply }) {
@@ -60,10 +60,15 @@ export default function ServicesSection({ lang, services, activeCategory, setAct
                 </div>
                 <div className="mt-5 text-lg font-bold text-[#07334a]">{lang === "bn" ? service.bn : service.en}</div>
                 <div className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">{lang === "bn" ? service.descBn : service.descEn}</div>
-                <div className="mt-4 text-xs font-bold text-[#159f9b]">{lang === "bn" ? "বিস্তারিত দেখুন →" : "View details →"}</div>
+                <div className="mt-4 flex items-center justify-between gap-2">
+                  <span className="text-xs font-bold text-[#159f9b]">{lang === "bn" ? "বিস্তারিত দেখুন →" : "View details →"}</span>
+                  <button type="button" onClick={() => onSelect(service)} className="inline-flex items-center gap-1 rounded-md text-xs font-bold text-amber-500 hover:underline" aria-label={lang === "bn" ? "রেটিং ও রিভিউ দেখুন" : "View ratings and reviews"}>
+                    <Star size={14} fill="currentColor" /> 4.5
+                  </button>
+                </div>
               </button>
               <button type="button" onClick={() => onApply(service)} className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#07334a] px-3 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b5264] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#159f9b]/30">
-                {lang === "bn" ? `${service.bn} সেবা নিন` : `Get ${service.en} Service`}
+                {lang === "bn" ? "সেবা নিন" : "Get Service"}
               </button>
             </article>
           );

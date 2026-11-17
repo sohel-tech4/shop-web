@@ -1,28 +1,64 @@
-const STORAGE_KEY = "nagorik_service_applications_v1";
+const APPLICATIONS_KEY = 'nagorik_local_applications';
+export const APPLICATION_STATUSES = ['pending', 'processing', 'completed', 'rejected'];
 
-export const APPLICATION_STATUSES = ["pending", "processing", "completed", "rejected"];
-export const readApplications = () => {
+const readAll = () => {
   try {
-    const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    const value = JSON.parse(localStorage.getItem(APPLICATIONS_KEY) || '[]');
     return Array.isArray(value) ? value : [];
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 };
-export const writeApplications = (items) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  window.dispatchEvent(new CustomEvent("nagorik:applications-updated"));
-};
-export const createApplication = (data) => {
-  const now = new Date();
-  const date = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}${String(now.getDate()).padStart(2,"0")}`;
-  const trackingId = `NG-${date}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
-  const item = { ...data, id: trackingId, trackingId, status: "pending", createdAt: now.toISOString(), updatedAt: now.toISOString(), adminNote: "" };
-  writeApplications([item, ...readApplications()]);
+const writeAll = (items) => localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(items));
+const makeId = () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+const makeTrackingId = () => `NG-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+
+export async function readApplications() {
+  return readAll().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+}
+
+export async function createApplication(data) {
+  const user = (() => {
+    try { return JSON.parse(localStorage.getItem('nagorik_auth_user') || 'null'); }
+    catch { return null; }
+  })();
+  if (!user?.email) throw new Error('আবেদন জমা দিতে প্রথমে লগইন করুন।');
+  const item = {
+    id: makeId(),
+    trackingId: makeTrackingId(),
+    userId: user.id,
+    userEmail: user.email,
+    email: user.email,
+    name: String(data.name || '').trim(),
+    phone: String(data.phone || '').trim(),
+    serviceId: data.serviceId,
+    serviceNameBn: data.serviceNameBn || '',
+    serviceNameEn: data.serviceNameEn || '',
+    details: String(data.details || '').trim(),
+    status: 'pending',
+    adminNote: '',
+    createdAt: new Date().toISOString(),
+  };
+  const items = readAll();
+  items.unshift(item);
+  writeAll(items);
   return item;
-};
-export const updateApplication = (id, changes) => writeApplications(readApplications().map((item) => item.id === id ? { ...item, ...changes, updatedAt: new Date().toISOString() } : item));
+}
+
+export async function updateApplication(id, changes) {
+  const items = readAll();
+  const index = items.findIndex((item) => item.id === id);
+  if (index < 0) throw new Error('আবেদনটি পাওয়া যায়নি।');
+  const next = { ...items[index], ...changes, id: items[index].id };
+  if (!APPLICATION_STATUSES.includes(next.status)) throw new Error('আবেদনের অবস্থা সঠিক নয়।');
+  items[index] = next;
+  writeAll(items);
+  return next;
+}
+
 export const statusLabel = (status, bn = true) => ({
-  pending: bn ? "অপেক্ষমাণ" : "Pending",
-  processing: bn ? "কাজ চলছে" : "Processing",
-  completed: bn ? "সম্পন্ন" : "Completed",
-  rejected: bn ? "বাতিল" : "Rejected",
+  pending: bn ? 'অপেক্ষমাণ' : 'Pending',
+  processing: bn ? 'কাজ চলছে' : 'Processing',
+  completed: bn ? 'সম্পন্ন' : 'Completed',
+  rejected: bn ? 'বাতিল' : 'Rejected',
 }[status] || status);

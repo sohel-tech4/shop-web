@@ -33,3 +33,11 @@ Run `npm run build`.
 ### ডেটা সংরক্ষণ সংক্রান্ত গুরুত্বপূর্ণ সীমাবদ্ধতা
 
 এই সংস্করণে আবেদনগুলো ব্রাউজারের `localStorage`-এ সংরক্ষিত হয়। তাই একই ব্রাউজার/ডিভাইসে ডেমো ও প্রাথমিক পরীক্ষা করা যাবে; অন্য গ্রাহকের ডিভাইস থেকে আবেদন সরাসরি Admin Dashboard-এ দেখা যাবে না। বাস্তব ব্যবহারের আগে Firebase Firestore/নিরাপদ API বা সার্ভার ডেটাবেস, Authentication Rules, validation, rate limiting এবং private document storage যুক্ত করতে হবে। গ্রাহকদের NID/পাসপোর্ট নম্বর, পাসওয়ার্ড বা সংবেদনশীল ডকুমেন্ট এই প্রাথমিক ফর্মে সংগ্রহ করা হয় না।
+
+## MongoDB Atlas backend
+See `MONGODB-SETUP-BN.md` for the required Netlify environment variables and deployment steps. The application now uses MongoDB through Netlify Functions; it no longer stores new applications in browser Local Storage. Do not include `.env` in deployments or public repositories.
+
+
+## Routing
+
+এই প্রজেক্টে client-side navigation-এর জন্য `react-router-dom` (BrowserRouter, useNavigate, useLocation এবং Navigate) ব্যবহার করা হয়েছে। Netlify-তে direct route refresh কাজ করাতে SPA redirect rule (`/* /index.html 200`) কনফিগার থাকতে হবে।

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Eye, EyeOff, Globe2, LogOut, ShieldCheck, UserRound, X } from 'lucide-react';
 import { signIn, signUp } from '../services/auth';
 
-const ADMIN_EMAIL = 'dhaka2627@gmail.com';
 
 export default function AuthPortal({ onClose, onAuthenticated, user, onLogout, lang = 'bn', setLang }) {
   const [mode, setMode] = useState('signin');
@@ -34,7 +33,7 @@ export default function AuthPortal({ onClose, onAuthenticated, user, onLogout, l
     }
   };
 
-  const isAdmin = Boolean(user && ADMIN_EMAIL && user.email?.toLowerCase() === ADMIN_EMAIL);
+  const isAdmin = user?.role === 'admin';
 
   return (
     <div className="auth-overlay" onMouseDown={(event) => { if (event.target === event.currentTarget && !user) onClose(); }}>
@@ -75,7 +74,7 @@ export default function AuthPortal({ onClose, onAuthenticated, user, onLogout, l
             <form onSubmit={submit} className="auth-form">
               {mode === 'signup' && <label>{tr('আপনার নাম', 'Your name')}<input value={name} onChange={(event) => setName(event.target.value)} placeholder={tr('সম্পূর্ণ নাম', 'Full name')} required autoComplete="name" /></label>}
               <label>{tr('ইমেইল', 'Email')}<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@example.com" required autoComplete="email" /></label>
-              <label>{tr('পাসওয়ার্ড', 'Password')}<div className="password-wrap"><input type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} placeholder={tr('কমপক্ষে ৬ অক্ষর', 'At least 6 characters')} required minLength={6} autoComplete={mode === 'signin' ? 'current-password' : 'new-password'} /><button type="button" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? tr('পাসওয়ার্ড লুকান', 'Hide password') : tr('পাসওয়ার্ড দেখান', 'Show password')}>{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button></div></label>
+              <label>{tr('পাসওয়ার্ড', 'Password')}<div className="password-wrap"><input type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} placeholder={tr('কমপক্ষে ৮ অক্ষর', 'At least 8 characters')} required minLength={8} autoComplete={mode === 'signin' ? 'current-password' : 'new-password'} /><button type="button" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? tr('পাসওয়ার্ড লুকান', 'Hide password') : tr('পাসওয়ার্ড দেখান', 'Show password')}>{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button></div></label>
               {error && <p className="auth-error" role="alert">{error}</p>}
               {notice && <p className="auth-notice" role="status">{notice}</p>}
               <button className="auth-submit" disabled={busy}>{busy ? tr('অপেক্ষা করুন...', 'Please wait...') : mode === 'signin' ? tr('লগইন করুন', 'Sign In') : tr('অ্যাকাউন্ট তৈরি করুন', 'Create Account')}</button>
