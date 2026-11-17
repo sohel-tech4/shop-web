@@ -1,56 +1,23 @@
-# Nagorik Computer & e-Service Website
-
-React + Vite + Tailwind CSS + DaisyUI website.
-
-## New features added
-
-- **Articles & Guides:** 12 bilingual sample articles. Select any article card to open a dedicated reading page with a title, full description, multiple images, and related articles.
-- **Customer Reviews:** 12 sample review cards in a separate section.
-- **Responsive layout:** Articles and reviews use a two-column grid on phones and three columns on larger screens. The first six cards are visible within the first three rows on a phone.
-- **Navigation:** Added Articles and Reviews links to the desktop and mobile menus.
-
-> Important: Article content is general sample guidance. Government requirements and fees can change; users should verify details with official sources. Customer reviews are demo/sample content and must be replaced with real customer feedback before publishing as genuine testimonials.
+# Nagorik Computer & e-Service
 
 ## Run locally
+1. Install Node.js 20 or newer.
+2. Open this folder in a terminal.
+3. Run `npm install`.
+4. Run `npm run dev`.
 
-```bash
-npm install
-npm run dev
-```
+## Admin dashboard
+- Open `/admin` (or click the Login button on the homepage) to open the dashboard directly.
+- No Firebase, API key, email, or password is used in this no-login demo mode.
+- This is intentionally public: anyone who knows the website URL can open the dashboard. Do not use it for private data or sensitive admin operations until a secure backend login is added.
 
-For Windows PowerShell:
+## Build
+Run `npm run build`.
 
-```powershell
-npm.cmd install
-npm.cmd run dev
-```
 
-## Production build
-
-```bash
-npm run build
-```
-
-Netlify settings:
-- Build command: `npm run build`
-- Publish directory: `dist`
-
-## Project structure
-
-```text
-src/
-├── App.jsx
-├── data/
-│   ├── ui.js
-│   └── articles.js
-├── components/
-│   ├── ArticlesSection.jsx
-│   ├── ArticleDetail.jsx
-│   ├── ReviewsSection.jsx
-│   └── ...existing components
-└── index.css
-```
-
-## Visitor counter setup
-
-Configure `COUNTERAPI_WORKSPACE` and `COUNTERAPI_TOKEN` as Netlify environment variables. The token is used only by the Netlify Function and is not exposed to the browser.
+## Demo Login / Sign Up
+- Admin email: `dhaka2627@gmail.com`
+- Admin password: configured in `src/services/auth.js` for this demo build.
+- Other visitors can create an account with Sign Up, then log in to the User Dashboard.
+- Demo accounts are stored in the current browser's localStorage; the login session uses sessionStorage. Accounts do not sync across devices or browsers.
+- **Security warning:** this frontend-only demo is not production authentication. The admin credential can be discovered from the built JavaScript. Do not use it to protect private data or real admin actions. For production, connect a server-side auth/database service and enforce admin roles on the server.

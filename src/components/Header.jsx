@@ -1,7 +1,10 @@
-import { Globe2, Menu, Moon, Sun, X } from "lucide-react";
+import { Globe2, Menu, Moon, Sun, X, ChevronDown, LogIn, LayoutDashboard, UserRound, LogOut } from "lucide-react";
+import React from "react";
 import { BUSINESS } from "../config";
 
-export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMenu, setMobileMenu, onShowArticles }) {
+export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMenu, setMobileMenu, onShowArticles, onLogin, onLogout, authUser }) {
+  const [settingsOpen, setSettingsOpen] = React.useState(false);
+  const settingsRef = React.useRef(null);
   const navItems = [
     ["#home", lang === "bn" ? "হোম" : "Home"],
     ["#services", lang === "bn" ? "সেবাসমূহ" : "Services"],
@@ -11,6 +14,60 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
     ["#contact", lang === "bn" ? "যোগাযোগ" : "Contact"],
   ];
 
+  // Keep the menu open while changing language/theme; close only on outside click or Escape.
+  React.useEffect(() => {
+    if (!settingsOpen) return;
+    const handlePointerDown = (event) => {
+      if (settingsRef.current && !settingsRef.current.contains(event.target)) setSettingsOpen(false);
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setSettingsOpen(false);
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [settingsOpen]);
+
+  const accountLabel = authUser
+    ? (lang === "bn" ? "ড্যাশবোর্ড" : "Dashboard")
+    : (lang === "bn" ? "লগইন / অ্যাকাউন্ট" : "Login / Account");
+  const accountSubLabel = authUser
+    ? (authUser.role === "admin" ? "Administrator" : (lang === "bn" ? "সাধারণ ব্যবহারকারী" : "User account"))
+    : (lang === "bn" ? "আপনার অ্যাকাউন্টে প্রবেশ করুন" : "Sign in to your account");
+  const AccountIcon = authUser ? LayoutDashboard : UserRound;
+  const profilePhoto = authUser?.photoURL || authUser?.photoUrl || authUser?.avatarUrl || authUser?.avatar || "";
+  const profileInitial = (authUser?.displayName || authUser?.email || "U").trim().charAt(0).toUpperCase();
+
+  const languageControl = (
+    <button className="settings-item" onClick={() => setLang((current) => current === "bn" ? "en" : "bn")}>
+      <span className="settings-item-icon"><Globe2 size={18} /></span>
+      <span className="flex-1 text-left"><strong>{lang === "bn" ? "ভাষা পরিবর্তন" : "Language"}</strong><small>{lang === "bn" ? "বাংলা" : "English"}</small></span>
+      <span className="settings-current">{lang === "bn" ? "EN" : "বাং"}</span>
+    </button>
+  );
+  const themeControl = (
+    <button className="settings-item" onClick={() => setDarkMode((value) => !value)}>
+      <span className="settings-item-icon">{darkMode ? <Sun size={18} /> : <Moon size={18} />}</span>
+      <span className="flex-1 text-left"><strong>{lang === "bn" ? "থিম" : "Appearance"}</strong><small>{darkMode ? (lang === "bn" ? "ডার্ক মোড" : "Dark mode") : (lang === "bn" ? "লাইট মোড" : "Light mode")}</small></span>
+      <span className={`theme-switch ${darkMode ? "on" : ""}`}><i /></span>
+    </button>
+  );
+  const accountControl = (
+    <button className="settings-item settings-login" onClick={() => { onLogin(); setSettingsOpen(false); setMobileMenu(false); }}>
+      <span className="settings-item-icon"><AccountIcon size={18} /></span>
+      <span className="flex-1 text-left"><strong>{accountLabel}</strong><small>{accountSubLabel}</small></span>
+    </button>
+  );
+  const logoutControl = authUser ? (
+    <button className="settings-item settings-logout" onClick={() => { onLogout?.(); setSettingsOpen(false); setMobileMenu(false); }}>
+      <span className="settings-item-icon"><LogOut size={18} /></span>
+      <span className="flex-1 text-left"><strong>{lang === "bn" ? "লগআউট" : "Log out"}</strong><small>{lang === "bn" ? "আপনার অ্যাকাউন্ট থেকে বের হয়ে যান" : "Sign out of your account"}</small></span>
+    </button>
+  ) : null;
+
   return (
     <header className="sticky top-0 z-40 border-b border-white/60 bg-white/90 backdrop-blur-xl">
       <div className="navbar mx-auto max-w-7xl px-4 sm:px-6">
@@ -18,9 +75,7 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
           <a href="#home" className="flex items-center gap-3">
             <img src="/logo.PNG" alt={BUSINESS.name} className="h-12 w-12 rounded-full object-contain shadow-sm" />
             <div className="hidden sm:block">
-              <div className="text-base font-extrabold tracking-tight brand-title sm:text-lg">
-                Nagorik  <span className="brand-accent">Computer & e-Service</span>
-              </div>
+              <div className="text-base font-extrabold tracking-tight brand-title sm:text-lg">Nagorik <span className="brand-accent">Computer & e-Service</span></div>
               <div className="text-xs font-medium text-slate-500">{lang === "bn" ? BUSINESS.taglineBn : BUSINESS.taglineEn}</div>
             </div>
           </a>
@@ -31,30 +86,46 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
             {navItems.map(([href, label]) => <a key={href} href={href} onClick={href === "#articles" ? onShowArticles : undefined} className="btn btn-ghost btn-sm">{label}</a>)}
           </nav>
 
-          <button className="btn btn-sm border-0 bg-slate-100" onClick={() => setLang(lang === "bn" ? "en" : "bn")} aria-label="Change language">
-            <Globe2 size={16} /> {lang === "bn" ? "EN" : "বাংলা"}
-          </button>
+          {/* Desktop settings dropdown */}
+          <div className="relative hidden md:block" ref={settingsRef}>
+            <button className="settings-trigger account-avatar-trigger btn btn-sm rounded-full" onClick={() => setSettingsOpen((open) => !open)} aria-label={authUser ? accountLabel : (lang === "bn" ? "লগইন ও সেটিংস" : "Login and settings")} aria-expanded={settingsOpen} title={authUser ? accountLabel : (lang === "bn" ? "লগইন / সেটিংস" : "Login / Settings")}>
+              {authUser && profilePhoto
+                ? <img src={profilePhoto} alt="প্রোফাইল ছবি" className="account-avatar-image" />
+                : authUser
+                  ? <span className="account-avatar-initial">{profileInitial}</span>
+                  : <UserRound size={21} />}
+            </button>
+            {settingsOpen && <div className="settings-menu absolute right-0 top-full z-50 mt-3 w-64 rounded-2xl border p-2 shadow-2xl">
+              <p className="px-3 pb-2 pt-2 text-xs font-bold uppercase tracking-wider opacity-60">{lang === "bn" ? "ওয়েবসাইট সেটিংস" : "Website settings"}</p>
+              {languageControl}
+              {themeControl}
+              <div className="settings-divider" />
+              {accountControl}
+              {logoutControl}
+            </div>}
+          </div>
 
-          <button className="theme-toggle btn btn-sm rounded-xl" onClick={() => setDarkMode((v) => !v)} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
-            {darkMode ? <Sun size={17} /> : <Moon size={17} />}
-            <span className="hidden sm:inline">{darkMode ? (lang === "bn" ? "লাইট" : "Light") : (lang === "bn" ? "ডার্ক" : "Dark")}</span>
-          </button>
-
-          <button className="btn btn-square btn-ghost md:hidden" onClick={() => setMobileMenu(!mobileMenu)} aria-label="Menu">
+          <button className="btn btn-square btn-ghost md:hidden" onClick={() => setMobileMenu((open) => !open)} aria-label="Menu" aria-expanded={mobileMenu}>
             {mobileMenu ? <X /> : <Menu />}
           </button>
         </div>
       </div>
 
-      {mobileMenu && (
-        <div className="mobile-nav border-t px-5 py-3 md:hidden">
-          <div className="flex flex-col gap-1">
-            {navItems.map(([href, label]) => (
-              <a key={href} onClick={() => { setMobileMenu(false); if (href === "#articles") onShowArticles?.(); }} href={href} className="rounded-xl px-3 py-2">{label}</a>
-            ))}
+      {mobileMenu && <div className="mobile-nav border-t px-5 py-3 md:hidden">
+        <div className="flex flex-col gap-1">
+          {navItems.map(([href, label]) => <a key={href} onClick={() => { setMobileMenu(false); if (href === "#articles") onShowArticles?.(); }} href={href} className="rounded-xl px-3 py-2">{label}</a>)}
+        </div>
+        <div className="mobile-account-settings mt-3 border-t pt-3">
+          <p className="mobile-settings-heading">{lang === "bn" ? "অ্যাকাউন্ট ও সেটিংস" : "Account & Settings"}</p>
+          {accountControl}
+          {logoutControl}
+          <div className="settings-divider" />
+          <div className="mobile-settings-grid">
+            {languageControl}
+            {themeControl}
           </div>
         </div>
-      )}
+      </div>}
     </header>
   );
 }

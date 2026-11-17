@@ -7,12 +7,19 @@ import {
   MessageCircle,
   RotateCcw,
   LoaderCircle,
+  Mail,
+  Phone,
 } from "lucide-react";
 
 const getGreeting = (lang) =>
   lang === "en"
-    ? "Hello! 👋 Welcome to Nagorik  Computer & e-Service. How can I help you today? You can ask about our services and required documents."
-    : "আসসালামু আলাইকুম! 👋 Nagorik  Computer & e-Service-এ স্বাগতম। কীভাবে সাহায্য করতে পারি? আমাদের সার্ভিস ও প্রয়োজনীয় কাগজপত্র সম্পর্কে জানতে পারেন।";
+    ? "Hello! 👋 Welcome to Nagorik Computer & e-Service. How can I help you today? You can ask about our services and required documents."
+    : "আসসালামু আলাইকুম! 👋 Nagorik Computer & e-Service-এ স্বাগতম। কীভাবে সাহায্য করতে পারি? আমাদের সার্ভিস ও প্রয়োজনীয় কাগজপত্র সম্পর্কে জানতে পারেন।";
+
+const getErrorMessage = (lang) =>
+  lang === "en"
+    ? "Sorry! Our AI Assistant is temporarily unavailable. Please contact us directly using the options below."
+    : "দুঃখিত! আমাদের AI Assistant এই মুহূর্তে সাময়িকভাবে কাজ করছে না। নিচের মাধ্যমে সরাসরি যোগাযোগ করুন।";
 
 export default function Chatbot({ lang = "bn" }) {
   const [open, setOpen] = useState(false);
@@ -105,10 +112,7 @@ export default function Chatbot({ lang = "bn" }) {
 
       if (!response.ok) {
         throw new Error(
-          data.error ||
-            (lang === "en"
-              ? "The assistant is temporarily unavailable."
-              : "দুঃখিত, এই মুহূর্তে উত্তর দেওয়া যাচ্ছে না।")
+          data.error || "AI service unavailable"
         );
       }
 
@@ -128,11 +132,8 @@ export default function Chatbot({ lang = "bn" }) {
         ...current,
         {
           role: "assistant",
-          content:
-            error.message ||
-            (lang === "en"
-              ? "Connection error. Please try again."
-              : "সংযোগে সমস্যা হয়েছে। আবার চেষ্টা করুন।"),
+          content: getErrorMessage(lang),
+          showContact: true,
         },
       ]);
     } finally {
@@ -150,7 +151,7 @@ export default function Chatbot({ lang = "bn" }) {
       {open && (
         <section
           className="ng-chat-panel"
-          aria-label="Nagorik  AI chat"
+          aria-label="Nagorik AI chat"
           role="dialog"
           aria-modal="false"
         >
@@ -160,7 +161,7 @@ export default function Chatbot({ lang = "bn" }) {
             </div>
 
             <div className="ng-chat-heading">
-              <strong>Nagorik  Assistant</strong>
+              <strong>Nagorik Assistant</strong>
               <span>
                 <i />
                 {lang === "en"
@@ -203,7 +204,10 @@ export default function Chatbot({ lang = "bn" }) {
               : "এখানে পাসওয়ার্ড, OTP বা পরিচয়পত্রের সম্পূর্ণ তথ্য পাঠাবেন না।"}
           </div>
 
-          <div className="ng-chat-messages" aria-live="polite">
+          <div
+            className="ng-chat-messages"
+            aria-live="polite"
+          >
             {messages.map((message, index) => (
               <div
                 key={`${index}-${message.role}`}
@@ -220,7 +224,30 @@ export default function Chatbot({ lang = "bn" }) {
                 )}
 
                 <div className="ng-chat-bubble">
-                  {message.content}
+                  <div>{message.content}</div>
+
+                  {message.showContact && (
+                    <div className="ng-chat-contact">
+                      <a
+                        href="mailto:dhaka2627@gmail.com"
+                        className="ng-chat-contact-link"
+                      >
+                        <span> <Mail size={16} />dhaka2627@gmail.com (Email)
+                        </span>
+                      </a>
+                      <a
+                        href="https://wa.me/8801776462919"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ng-chat-contact-link"
+                      >
+                        <MessageCircle size={17} />
+                        <span>
+                          01776462919 (WhatsApp)
+                        </span>
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -301,8 +328,8 @@ export default function Chatbot({ lang = "bn" }) {
               ? "Close assistant"
               : "চ্যাট বন্ধ করুন"
             : lang === "en"
-              ? "Chat with Nagorik "
-              : "Nagorik -এর সঙ্গে চ্যাট করুন"
+              ? "Chat with Nagorik"
+              : "Nagorik-এর সঙ্গে চ্যাট করুন"
         }
       >
         {open ? (

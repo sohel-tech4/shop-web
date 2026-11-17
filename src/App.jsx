@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { services } from "./services";
 import { useTheme } from "./hooks/useTheme";
 import Header from "./components/Header";
@@ -13,6 +13,14 @@ import ArticlesSection from "./components/ArticlesSection";
 import ArticleDetail from "./components/ArticleDetail";
 import ReviewsSection from "./components/ReviewsSection";
 import { articles, reviews } from "./data/articles";
+import DashboardPage from "./components/DashboardPage";
+import AuthPortal from "./components/AuthPortal";
+
+const getRoute = () => window.location.pathname.replace(/\/+$/, "") || "/";
+const readSession = () => {
+  try { return JSON.parse(sessionStorage.getItem("nagorik_auth_user") || "null"); }
+  catch { return null; }
+};
 
 export default function App() {
   const [lang, setLang] = useState("bn");
@@ -24,6 +32,43 @@ export default function App() {
   const [landServiceType, setLandServiceType] = useState(null);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [darkMode, setDarkMode] = useTheme();
+  const [route, setRoute] = useState(getRoute);
+  const [authUser, setAuthUser] = useState(readSession);
+  const [showAuth, setShowAuth] = useState(false);
+  const [showLoginSuccess, setShowLoginSuccess] = useState(false);
+
+  const navigate = (path, replace = false) => {
+    if (replace) window.history.replaceState({}, "", path);
+    else window.history.pushState({}, "", path);
+    setRoute(getRoute());
+    setShowAuth(false);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
+  useEffect(() => {
+    const onPopState = () => setRoute(getRoute());
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  const handleAuthenticated = (user) => {
+    setAuthUser(user);
+    sessionStorage.setItem("nagorik_auth_user", JSON.stringify(user));
+    navigate(user.role === "admin" ? "/admin" : "/dashboard");
+    setShowLoginSuccess(true);
+  };
+  // Login confirmation is intentionally brief; the dashboard is already rendered underneath.
+  useEffect(() => {
+    if (!showLoginSuccess) return undefined;
+    const timer = window.setTimeout(() => setShowLoginSuccess(false), 1600);
+    return () => window.clearTimeout(timer);
+  }, [showLoginSuccess]);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("nagorik_auth_user");
+    setAuthUser(null);
+    navigate("/");
+  };
 
   const filteredServices = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -34,22 +79,39 @@ export default function App() {
     });
   }, [activeCategory, query]);
 
-  const openService = (service) => {
-    setSelectedService(service);
-    setVisaType(null);
-    setLandServiceType(null);
-  };
-  const closeService = () => {
-    setSelectedService(null);
-    setVisaType(null);
-    setLandServiceType(null);
-  };
+  const openService = (service) => { setSelectedService(service); setVisaType(null); setLandServiceType(null); };
+  const closeService = () => { setSelectedService(null); setVisaType(null); setLandServiceType(null); };
   const scrollToServices = () => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
   const showArticles = () => { setSelectedArticle(null); requestAnimationFrame(() => document.getElementById("articles")?.scrollIntoView({ behavior: "smooth" })); };
   const openArticle = (article) => { setSelectedArticle(article); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
+  if (route === "/admin" || route === "/dashboard") {
+    if (!authUser) return <AuthPortal onClose={() => navigate("/")} onAuthenticated={handleAuthenticated} />;
+    const isAdmin = authUser.role === "admin";
+    if ((route === "/admin") !== isAdmin) {
+      window.history.replaceState({}, "", isAdmin ? "/admin" : "/dashboard");
+      if (route !== (isAdmin ? "/admin" : "/dashboard")) setRoute(isAdmin ? "/admin" : "/dashboard");
+    }
+    return <>
+      <DashboardPage user={authUser} isAdmin={isAdmin} onLogout={handleLogout} onHome={() => navigate("/")} />
+      {showLoginSuccess && <div className="login-success-overlay" role="dialog" aria-modal="true" aria-labelledby="login-success-title">
+        <div className="login-success-card">
+          <button className="login-success-close" onClick={() => setShowLoginSuccess(false)} aria-label="Close">×</button>
+          <div className="login-success-orbit"><div className="login-success-check">✓</div><span className="success-spark spark-one">✦</span><span className="success-spark spark-two">✧</span><span className="success-spark spark-three">✦</span></div>
+          <span className="login-success-kicker">NAGORIK COMPUTER & E-SERVICE</span>
+          <h2 id="login-success-title">{isAdmin ? "অ্যাডমিন লগইন সফল!" : "লগইন সফল হয়েছে!"}</h2>
+          <p className="login-success-welcome">স্বাগতম, <strong>{authUser.displayName || authUser.email}</strong></p>
+          <p className="login-success-description">{isAdmin ? "আপনি অ্যাডমিন হিসেবে প্রবেশ করেছেন। এখন ওয়েবসাইট পরিচালনা করতে পারবেন।" : "আপনি সফলভাবে আপনার অ্যাকাউন্টে প্রবেশ করেছেন। আপনার ড্যাশবোর্ড প্রস্তুত।"}</p>
+          <div className="login-success-role"><span>{isAdmin ? "🛡️" : "👤"}</span><div><small>ACCOUNT TYPE</small><strong>{isAdmin ? "Administrator" : "Registered User"}</strong></div><span className="login-success-active">সক্রিয়</span></div>
+          <div className="login-success-auto"><span className="login-success-progress" /><small>আপনার ড্যাশবোর্ড চালু হচ্ছে...</small></div>
+          <p className="login-success-foot">আপনার তথ্য সুরক্ষিত রাখুন • Nagorik e-Service</p>
+        </div>
+      </div>}
+    </>;
+  }
+
   return <div className={`min-h-screen text-slate-800 ${darkMode ? "dark-mode" : "light-mode"}`}>
-    <Header lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} onShowArticles={showArticles} />
+    <Header lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} onShowArticles={showArticles} onLogin={() => authUser ? navigate(authUser.role === "admin" ? "/admin" : "/dashboard") : setShowAuth(true)} onLogout={handleLogout} authUser={authUser} />
     <main id="home">
       {selectedArticle ? <ArticleDetail lang={lang} article={selectedArticle} onBack={() => { setSelectedArticle(null); requestAnimationFrame(() => document.getElementById("articles")?.scrollIntoView({ behavior: "smooth" })); }} relatedArticles={articles.filter((item) => item.id !== selectedArticle.id).slice(0, 3)} onSelect={openArticle} /> : <>
         <Hero lang={lang} serviceCount={services.length} onExplore={scrollToServices} />
@@ -63,5 +125,6 @@ export default function App() {
     <Footer lang={lang} />
     <ServiceModal lang={lang} service={selectedService} visaType={visaType} setVisaType={setVisaType} landServiceType={landServiceType} setLandServiceType={setLandServiceType} onClose={closeService} />
     <Chatbot lang={lang} />
+    {showAuth && <AuthPortal onClose={() => setShowAuth(false)} onAuthenticated={handleAuthenticated} />}
   </div>;
 }
