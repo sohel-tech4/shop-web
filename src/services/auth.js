@@ -1,91 +1,90 @@
 const USERS_KEY = 'nagorik_local_users';
 const SESSION_KEY = 'nagorik_auth_user';
 const ADMIN_PROFILE_KEY = 'nagorik_admin_profile';
-
-// লোকাল-স্টোরেজ সংস্করণ: অ্যাডমিন পাসওয়ার্ডটি নিজের মতো পরিবর্তন করুন।
-// এটি ক্লায়েন্ট-সাইড ডেমো নিরাপত্তা; production-এ নিরাপদ নয়।
-const ADMIN_EMAIL = 'dhaka2627@gmail.com';
-const ADMIN_PASSWORD = '1010995982';
-
+const ADMIN_PHONE = '01776462919';
+// Demo-mode admin PIN verifier. For production, move this check to a server function.
+const ADMIN_PIN_SALT = 'nagorik-admin-pin-v1';
+const ADMIN_PIN_HASH = '9ef828cdb72d6a7bf27b7281f25e008cecb7fdab210b9f16c0ca1c21c3f9889d';
+const PBKDF2_ITERATIONS = 310000;
+const normalizePhone = (value) => String(value || '').replace(/[\s-]/g, '').trim();
+const makeId = () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 const readUsers = () => {
-  try {
-    const value = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
-    return Array.isArray(value) ? value : [];
-  } catch {
-    return [];
-  }
+  try { const value = JSON.parse(localStorage.getItem(USERS_KEY) || '[]'); return Array.isArray(value) ? value : []; }
+  catch { return []; }
 };
 const writeUsers = (users) => localStorage.setItem(USERS_KEY, JSON.stringify(users));
-const normalizeEmail = (email) => String(email || '').trim().toLowerCase();
-const makeId = () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-async function hashPassword(password, salt) {
-  const bytes = new TextEncoder().encode(`${salt}:${password}`);
-  const digest = await crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+const validPhone = (phone) => /^(?:\+?8801|01)[3-9]\d{8}$/.test(phone);
+const validPin = (pin) => /^\d{6}$/.test(String(pin || ''));
+const toHex = (bytes) => Array.from(new Uint8Array(bytes), (byte) => byte.toString(16).padStart(2, '0')).join('');
+async function derivePin(pin, salt) {
+  if (!globalThis.crypto?.subtle) throw new Error('নিরাপদ PIN যাচাইয়ের জন্য HTTPS ব্যবহার করুন।');
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(String(pin)), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: new TextEncoder().encode(salt), iterations: PBKDF2_ITERATIONS, hash: 'SHA-256' }, key, 256);
+  return toHex(bits);
 }
+const safeUser = (user) => ({ id: user.id, displayName: user.displayName || '', phone: user.phone, email: user.phone, role: user.role || 'user', createdAt: user.createdAt, pinVerified: true });
 
-export async function signUp(email, password, displayName = '') {
-  const cleanEmail = normalizeEmail(email);
-  if (!cleanEmail || !cleanEmail.includes('@')) throw new Error('সঠিক ইমেইল ঠিকানা দিন।');
-  if (password.length < 8) throw new Error('পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।');
-  if (cleanEmail === normalizeEmail(ADMIN_EMAIL)) throw new Error('এই ইমেইলটি অ্যাডমিনের জন্য সংরক্ষিত।');
-  const users = readUsers();
-  if (users.some((item) => normalizeEmail(item.email) === cleanEmail)) throw new Error('এই ইমেইল দিয়ে ইতিমধ্যে অ্যাকাউন্ট খোলা হয়েছে।');
-  const salt = makeId();
-  const user = {
-    id: makeId(), displayName: String(displayName || '').trim(), email: cleanEmail,
-    role: 'user', passwordSalt: salt, passwordHash: await hashPassword(password, salt),
-    createdAt: new Date().toISOString(),
-  };
-  users.push(user);
-  writeUsers(users);
-  const safeUser = { id: user.id, displayName: user.displayName, email: user.email, role: user.role, createdAt: user.createdAt };
-  localStorage.setItem(SESSION_KEY, JSON.stringify(safeUser));
-  return safeUser;
-}
+// Browser-local PIN login. This does not prove ownership of the phone number.
+export async function signIn(phone, pin, confirmPin = '') {
+  const cleanPhone = normalizePhone(phone);
+  if (!validPhone(cleanPhone)) throw new Error('সঠিক বাংলাদেশি মোবাইল নম্বর দিন।');
+  if (!validPin(pin)) throw new Error('PIN অবশ্যই ৬ সংখ্যার হতে হবে।');
 
-export async function signIn(email, password) {
-  const cleanEmail = normalizeEmail(email);
-  if (cleanEmail === normalizeEmail(ADMIN_EMAIL)) {
-    if (password !== ADMIN_PASSWORD) throw new Error('ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।');
-    const savedProfile = (() => { try { return JSON.parse(localStorage.getItem(ADMIN_PROFILE_KEY) || '{}'); } catch { return {}; } })();
-    const admin = { id: 'nagorik-local-admin', displayName: 'Nagorik Admin', email: ADMIN_EMAIL, role: 'admin', ...savedProfile, id: 'nagorik-local-admin', email: ADMIN_EMAIL, role: 'admin' };
+  if (cleanPhone === ADMIN_PHONE) {
+    const actual = await derivePin(pin, ADMIN_PIN_SALT);
+    if (actual !== ADMIN_PIN_HASH) throw new Error('অ্যাডমিন PIN সঠিক নয়।');
+    let savedProfile = {};
+    try { savedProfile = JSON.parse(localStorage.getItem(ADMIN_PROFILE_KEY) || '{}'); } catch {}
+    const admin = { id: 'nagorik-local-admin', displayName: savedProfile.displayName || 'Nagorik Admin', phone: ADMIN_PHONE, email: ADMIN_PHONE, role: 'admin', ...savedProfile, id: 'nagorik-local-admin', phone: ADMIN_PHONE, email: ADMIN_PHONE, role: 'admin', pinVerified: true };
     localStorage.setItem(SESSION_KEY, JSON.stringify(admin));
     return admin;
   }
-  const user = readUsers().find((item) => normalizeEmail(item.email) === cleanEmail);
-  if (!user) throw new Error('এই ইমেইলে কোনো অ্যাকাউন্ট পাওয়া যায়নি। আগে সাইন আপ করুন।');
-  const enteredHash = await hashPassword(password, user.passwordSalt);
-  if (enteredHash !== user.passwordHash) throw new Error('ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।');
-  const safeUser = { id: user.id, displayName: user.displayName, email: user.email, role: 'user', createdAt: user.createdAt };
-  localStorage.setItem(SESSION_KEY, JSON.stringify(safeUser));
-  return safeUser;
+
+  const users = readUsers();
+  let user = users.find((item) => normalizePhone(item.phone || item.email) === cleanPhone);
+  if (user?.pinHash) {
+    const actual = await derivePin(pin, user.pinSalt);
+    if (actual !== user.pinHash) throw new Error('মোবাইল নম্বর অথবা PIN সঠিক নয়।');
+  } else {
+    if (pin !== String(confirmPin || '')) throw new Error('নিশ্চিত PIN মিলছে না।');
+    if (user?.pinHash) throw new Error('এই নম্বরের PIN ইতিমধ্যে সেট করা আছে।');
+    const pinSalt = makeId();
+    const pinHash = await derivePin(pin, pinSalt);
+    if (!user) {
+      user = { id: makeId(), displayName: '', phone: cleanPhone, email: cleanPhone, role: 'user', createdAt: new Date().toISOString() };
+      users.push(user);
+    }
+    user.phone = cleanPhone;
+    user.email = cleanPhone;
+    user.pinSalt = pinSalt;
+    user.pinHash = pinHash;
+    writeUsers(users);
+  }
+  const result = safeUser(user);
+  localStorage.setItem(SESSION_KEY, JSON.stringify(result));
+  return result;
 }
 
 export function getRegisteredUsers() {
-  return readUsers().map(({ passwordHash, passwordSalt, ...safeUser }) => safeUser);
-}
-
-export async function sendPasswordReset() {
-  throw new Error('লোকাল-স্টোরেজ সংস্করণে পাসওয়ার্ড রিসেট সুবিধা নেই।');
+  return readUsers().map(({ passwordHash, passwordSalt, pinHash, pinSalt, ...item }) => ({ ...item, phone: item.phone || item.email, email: item.phone || item.email }));
 }
 
 export function updateUserProfile(userId, changes) {
   if (userId === 'nagorik-local-admin') {
     let current = {};
     try { current = JSON.parse(localStorage.getItem(ADMIN_PROFILE_KEY) || '{}'); } catch {}
-    const updated = { ...current, displayName: String(changes.displayName ?? current.displayName ?? 'Nagorik Admin').trim(), address: String(changes.address ?? current.address ?? '').trim(), phone: String(changes.phone ?? current.phone ?? '').trim(), photo: changes.photo === undefined ? (current.photo || '') : changes.photo, updatedAt: new Date().toISOString() };
+    const updated = { ...current, displayName: String(changes.displayName ?? current.displayName ?? 'Nagorik Admin').trim(), address: String(changes.address ?? current.address ?? '').trim(), phone: ADMIN_PHONE, photo: changes.photo === undefined ? (current.photo || '') : changes.photo, updatedAt: new Date().toISOString() };
     localStorage.setItem(ADMIN_PROFILE_KEY, JSON.stringify(updated));
-    return { id: 'nagorik-local-admin', displayName: updated.displayName, email: ADMIN_EMAIL, role: 'admin', ...updated };
+    return { id: 'nagorik-local-admin', email: ADMIN_PHONE, phone: ADMIN_PHONE, role: 'admin', pinVerified: true, ...updated };
   }
   const users = readUsers();
   const index = users.findIndex((item) => item.id === userId);
   if (index < 0) throw new Error('ব্যবহারকারী পাওয়া যায়নি।');
   const current = users[index];
-  users[index] = { ...current, displayName: String(changes.displayName ?? current.displayName).trim(), address: String(changes.address ?? current.address ?? '').trim(), phone: String(changes.phone ?? current.phone ?? '').trim(), photo: changes.photo === undefined ? (current.photo || '') : changes.photo, updatedAt: new Date().toISOString() };
+  users[index] = { ...current, displayName: String(changes.displayName ?? current.displayName ?? '').trim(), address: String(changes.address ?? current.address ?? '').trim(), phone: current.phone || current.email, email: current.phone || current.email, photo: changes.photo === undefined ? (current.photo || '') : changes.photo, updatedAt: new Date().toISOString() };
   writeUsers(users);
-  const { passwordHash, passwordSalt, ...safeUser } = users[index];
-  return safeUser;
+  const { pinHash, pinSalt, ...safe } = users[index];
+  return safe;
 }
 
 export function deleteRegisteredUser(userId) {

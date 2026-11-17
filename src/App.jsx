@@ -19,7 +19,7 @@ import AuthPortal from "./components/AuthPortal";
 import ApplicationCenter from "./components/ApplicationCenter";
 
 const readSession = () => {
-  try { return JSON.parse(localStorage.getItem("nagorik_auth_user") || "null"); }
+  try { const user = JSON.parse(localStorage.getItem("nagorik_auth_user") || "null"); return user?.phone && user?.pinVerified === true ? user : null; }
   catch { return null; }
 };
 
@@ -125,13 +125,13 @@ export default function App() {
   };
   const closeService = () => { setSelectedService(null); setVisaType(null); setLandServiceType(null); };
   const selectedServiceReviews = serviceReviews.filter((review) => review.serviceId === selectedService?.id);
-  const hasReviewedSelectedService = Boolean(authUser && serviceReviews.some((review) => review.serviceId === selectedService?.id && ((review.userId && review.userId === authUser.id) || review.email?.toLowerCase() === authUser.email?.toLowerCase())));
-  const canReviewSelectedService = Boolean(authUser && !hasReviewedSelectedService && completedApplications.some((app) => app.serviceId === selectedService?.id && app.status === "completed" && (app.userId === authUser.id || app.userEmail?.toLowerCase() === authUser.email?.toLowerCase())));
+  const hasReviewedSelectedService = Boolean(authUser && serviceReviews.some((review) => review.serviceId === selectedService?.id && ((review.userId && review.userId === authUser.id) || review.email?.toLowerCase() === (authUser.phone || authUser.email)?.toLowerCase())));
+  const canReviewSelectedService = Boolean(authUser && !hasReviewedSelectedService && completedApplications.some((app) => app.serviceId === selectedService?.id && app.status === "completed" && (app.userId === authUser.id || app.userEmail?.toLowerCase() === (authUser.phone || authUser.email)?.toLowerCase())));
   const saveReview = ({ serviceId, serviceNameBn, serviceNameEn, rating, comment }) => {
     if (!authUser || !serviceId || !comment?.trim()) return false;
-    const alreadyReviewed = serviceReviews.some((item) => item.serviceId === serviceId && ((item.userId && item.userId === authUser.id) || item.email?.toLowerCase() === authUser.email?.toLowerCase()));
+    const alreadyReviewed = serviceReviews.some((item) => item.serviceId === serviceId && ((item.userId && item.userId === authUser.id) || item.email?.toLowerCase() === (authUser.phone || authUser.email)?.toLowerCase()));
     if (alreadyReviewed) return false;
-    const nextReview = { id: `${authUser.id || authUser.email}-${serviceId}`, serviceId, serviceNameBn, serviceNameEn, userId: authUser.id, email: authUser.email, displayName: authUser.displayName || authUser.email, rating, comment: comment.trim(), createdAt: new Date().toISOString() };
+    const nextReview = { id: `${authUser.id || (authUser.phone || authUser.email)}-${serviceId}`, serviceId, serviceNameBn, serviceNameEn, userId: authUser.id, email: (authUser.phone || authUser.email), displayName: authUser.displayName || (authUser.phone || authUser.email), rating, comment: comment.trim(), createdAt: new Date().toISOString() };
     const next = [...serviceReviews, nextReview];
     setServiceReviews(next);
     localStorage.setItem("nagorik_service_reviews", JSON.stringify(next));
@@ -163,7 +163,7 @@ export default function App() {
           <div className="login-success-orbit"><div className="login-success-check">✓</div><span className="success-spark spark-one">✦</span><span className="success-spark spark-two">✧</span><span className="success-spark spark-three">✦</span></div>
           <span className="login-success-kicker">NAGORIK COMPUTER & E-SERVICE</span>
           <h2 id="login-success-title">{lang === "bn" ? (isAdmin ? "অ্যাডমিন লগইন সফল!" : "লগইন সফল হয়েছে!") : (isAdmin ? "Admin login successful!" : "Login successful!")}</h2>
-          <p className="login-success-welcome">{lang === "bn" ? "স্বাগতম," : "Welcome,"} <strong>{authUser.displayName || authUser.email}</strong></p>
+          <p className="login-success-welcome">{lang === "bn" ? "স্বাগতম," : "Welcome,"} <strong>{authUser.displayName || (authUser.phone || authUser.email)}</strong></p>
           <p className="login-success-description">{lang === "bn" ? (isAdmin ? "আপনি অ্যাডমিন হিসেবে প্রবেশ করেছেন। এখন ওয়েবসাইট পরিচালনা করতে পারবেন।" : "আপনি সফলভাবে আপনার অ্যাকাউন্টে প্রবেশ করেছেন। আপনার ড্যাশবোর্ড প্রস্তুত।") : (isAdmin ? "You are signed in as an administrator and can now manage the website." : "You have signed in successfully. Your dashboard is ready.")}</p>
           <div className="login-success-role"><span>{isAdmin ? "🛡️" : "👤"}</span><div><small>{lang === "bn" ? "অ্যাকাউন্টের ধরন" : "ACCOUNT TYPE"}</small><strong>{isAdmin ? "Administrator" : "Registered User"}</strong></div><span className="login-success-active">{lang === "bn" ? "সক্রিয়" : "Active"}</span></div>
           <div className="login-success-auto"><span className="login-success-progress" /><small>{lang === "bn" ? "আপনার ড্যাশবোর্ড চালু হচ্ছে..." : "Opening your dashboard..."}</small></div>
