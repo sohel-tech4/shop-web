@@ -22,13 +22,13 @@ export async function createApplication(data) {
     try { return JSON.parse(localStorage.getItem('nagorik_auth_user') || 'null'); }
     catch { return null; }
   })();
-  if (!user?.email) throw new Error('আবেদন জমা দিতে প্রথমে লগইন করুন।');
+  if (!(user?.phone || user?.email)) throw new Error('আবেদন জমা দিতে প্রথমে লগইন করুন।');
   const item = {
     id: makeId(),
     trackingId: makeTrackingId(),
     userId: user.id,
-    userEmail: user.email,
-    email: user.email,
+    userEmail: user.phone || user.email,
+    email: user.phone || user.email,
     name: String(data.name || '').trim(),
     phone: String(data.phone || '').trim(),
     serviceId: data.serviceId,
@@ -54,6 +54,24 @@ export async function updateApplication(id, changes) {
   items[index] = next;
   writeAll(items);
   return next;
+}
+
+export async function deleteApplication(id) {
+  const user = (() => {
+    try { return JSON.parse(localStorage.getItem('nagorik_auth_user') || 'null'); }
+    catch { return null; }
+  })();
+  if (!user) throw new Error('আবেদন মুছতে প্রথমে লগইন করুন।');
+  const items = readAll();
+  const index = items.findIndex((item) => item.id === id);
+  if (index < 0) throw new Error('আবেদনটি পাওয়া যায়নি।');
+  const item = items[index];
+  const isOwner = (user.id && item.userId && String(user.id) === String(item.userId)) ||
+    (user.phone && String(item.phone || '').replace(/\D/g, '') === String(user.phone).replace(/\D/g, ''));
+  if (!isOwner) throw new Error('শুধু নিজের আবেদন মুছতে পারবেন।');
+  items.splice(index, 1);
+  writeAll(items);
+  return true;
 }
 
 export const statusLabel = (status, bn = true) => ({

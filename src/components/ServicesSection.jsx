@@ -3,21 +3,21 @@ import { ArrowRight, Search, ChevronDown, ChevronUp, Star } from "lucide-react";
 import { categories, fallbackServiceIcon, serviceIcons } from "../data/ui";
 
 export default function ServicesSection({ lang, services, activeCategory, setActiveCategory, query, setQuery, onSelect, onApply }) {
-  // Show 4 cards on phones/tablets and 8 on large screens, then reveal one batch at a time.
+  // Mobile/tablet: 6 services per batch. Large screens: 8 services per batch.
   const [batchSize, setBatchSize] = useState(() =>
-    typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches ? 8 : 4
+    typeof window !== "undefined" && window.innerWidth >= 1024 ? 8 : 6
   );
   const [visibleCount, setVisibleCount] = useState(batchSize);
 
+  // Update the batch size when the viewport crosses the large-screen breakpoint.
   useEffect(() => {
-    const media = window.matchMedia("(min-width: 1024px)");
-    const updateBatchSize = () => setBatchSize(media.matches ? 8 : 4);
+    const updateBatchSize = () => setBatchSize(window.innerWidth >= 1024 ? 8 : 6);
     updateBatchSize();
-    media.addEventListener?.("change", updateBatchSize);
-    return () => media.removeEventListener?.("change", updateBatchSize);
+    window.addEventListener("resize", updateBatchSize);
+    return () => window.removeEventListener("resize", updateBatchSize);
   }, []);
 
-  // Start from the first batch whenever the user changes category, search, or screen size.
+  // Reset the visible batch when category, search, or screen size changes.
   useEffect(() => {
     setVisibleCount(batchSize);
   }, [activeCategory, query, batchSize]);
@@ -48,12 +48,12 @@ export default function ServicesSection({ lang, services, activeCategory, setAct
         ))}
       </div>
 
-      <div className="mt-8 grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {visibleServices.map((service) => {
           const Icon = serviceIcons[service.id] || fallbackServiceIcon;
           return (
-            <article key={service.id} className="service-card group text-left">
-              <button type="button" onClick={() => onSelect(service)} className="block w-full text-left">
+            <article key={service.id} className="service-card group flex flex-col text-left">
+              <button type="button" onClick={() => onSelect(service)} className="block w-full flex-1 text-left">
                 <div className="flex items-start justify-between gap-3">
                   <div className="service-icon"><Icon size={23} strokeWidth={1.9} /></div>
                   <ArrowRight size={18} className="mt-2 text-slate-300 transition group-hover:translate-x-1 group-hover:text-[#159f9b]" />
@@ -66,9 +66,6 @@ export default function ServicesSection({ lang, services, activeCategory, setAct
                     <Star size={14} fill="currentColor" /> 4.5
                   </button>
                 </div>
-              </button>
-              <button type="button" onClick={() => onApply(service)} className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#07334a] px-3 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b5264] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#159f9b]/30">
-                {lang === "bn" ? "সেবা নিন" : "Get Service"}
               </button>
             </article>
           );

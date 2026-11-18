@@ -48,7 +48,7 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
     : (lang === "bn" ? "আপনার অ্যাকাউন্টে প্রবেশ করুন" : "Sign in to your account");
   const AccountIcon = authUser ? LayoutDashboard : UserRound;
   const profilePhoto = authUser?.photo || authUser?.photoURL || authUser?.photoUrl || authUser?.avatarUrl || authUser?.avatar || "";
-  const profileInitial = (authUser?.displayName || authUser?.email || "U").trim().charAt(0).toUpperCase();
+  const profileInitial = (authUser?.displayName || authUser?.phone || authUser?.email || "U").trim().charAt(0).toUpperCase();
 
   const languageControl = (
     <button className="settings-item" onClick={() => setLang((current) => current === "bn" ? "en" : "bn")}>

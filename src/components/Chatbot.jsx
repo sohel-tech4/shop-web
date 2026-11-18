@@ -145,7 +145,7 @@ export default function Chatbot({ lang = "bn" }) {
     <div
       className="ng-chatbot"
       style={{
-        bottom: "60px",
+        bottom: "16px",
       }}
     >
       {open && (
@@ -335,12 +335,7 @@ export default function Chatbot({ lang = "bn" }) {
         {open ? (
           <X size={24} />
         ) : (
-          <>
-            <MessageCircle size={23} />
-            <span>
-              {lang === "en" ? "Ask us" : "জিজ্ঞাসা করুন"}
-            </span>
-          </>
+          <MessageCircle size={25} />
         )}
       </button>
     </div>

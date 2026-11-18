@@ -549,7 +549,7 @@ body {
 
 /* Floating bilingual AI assistant — isolated styles to preserve existing site UI. */
 .ng-chatbot { position: fixed; right: 22px; bottom: 22px; z-index: 1000; font-family: inherit; }
-.ng-chat-launcher { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 54px; padding: 0 19px; border: 0; border-radius: 999px; color: #fff; background: linear-gradient(135deg, #0f7080, #159f9b); box-shadow: 0 10px 30px rgba(15,112,128,.28); cursor: pointer; font-weight: 700; transition: transform .18s ease, box-shadow .18s ease; }
+.ng-chat-launcher { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; min-height: 56px; padding: 0; border: 0; border-radius: 999px; color: #fff; background: linear-gradient(135deg, #0f7080, #159f9b); box-shadow: 0 10px 30px rgba(15,112,128,.28); cursor: pointer; font-weight: 700; transition: transform .18s ease, box-shadow .18s ease; }
 .ng-chat-launcher:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(15,112,128,.35); }
 .ng-chat-launcher.is-open { width: 54px; padding: 0; }
 .ng-chat-panel { position: absolute; right: 0; bottom: 68px; display: flex; flex-direction: column; width: min(380px, calc(100vw - 28px)); height: min(570px, calc(100dvh - 115px)); min-height: 330px; overflow: hidden; border: 1px solid #d9e9ed; border-radius: 20px; background: #fff; color: #19313b; box-shadow: 0 18px 60px rgba(7,51,74,.22); }
@@ -590,7 +590,7 @@ body {
 @media (max-width: 480px) {
   .ng-chatbot { right: 12px; bottom: 12px; }
   .ng-chat-panel { position: fixed; right: 8px; bottom: 76px; width: calc(100vw - 16px); height: min(620px, calc(100dvh - 92px)); min-height: 300px; border-radius: 17px; }
-  .ng-chat-launcher { min-height: 50px; padding: 0 16px; }
+  .ng-chat-launcher { width: 52px; height: 52px; min-height: 52px; padding: 0; }
   .ng-chat-launcher.is-open { width: 50px; }
 }
 
@@ -1109,3 +1109,52 @@ footer .text-white\/45 {
   .service-card { min-height: 0; }
   .service-card > button:last-child { margin-top: 0.7rem; padding: 0.55rem 0.35rem; font-size: 0.68rem; line-height: 1rem; }
 }
+
+
+/* Service cards: consistent bottom-aligned action and six-item batches */
+.service-card { display:flex; flex-direction:column; }
+.service-card > button:first-child { flex:1 1 auto; }
+.service-card > button:last-child { margin-top:auto; }
+@media (max-width: 639px) {
+  #services .service-card { min-height: 245px; padding: 1rem; }
+  #services .service-card > button:last-child { margin-top: 1rem; }
+}
+
+/* Admin user profile cards and biography dialog */
+.ng-user-card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:12px; margin:8px 0 16px; }
+.ng-user-card { display:flex; min-width:0; flex-direction:column; align-items:flex-start; gap:7px; padding:16px; border:1px solid #dce9ed; border-radius:14px; background:#f8fcfd; color:#18394a; text-align:left; cursor:pointer; }
+.ng-user-card:hover { border-color:#159f9b; background:#eefaf7; }
+.ng-user-card img,.ng-user-bio-heading img { width:48px; height:48px; object-fit:cover; border-radius:50%; }
+.ng-user-card-avatar { display:grid; width:48px; height:48px; flex:0 0 48px; place-items:center; border-radius:50%; background:#d7f5ef; color:#087b78; font-weight:900; font-size:20px; }
+.ng-user-card strong { max-width:100%; overflow-wrap:anywhere; font-size:14px; }
+.ng-user-card small { max-width:100%; overflow-wrap:anywhere; color:#607985; font-size:11px; }
+.ng-user-card > span:last-child { display:flex; align-items:center; gap:4px; color:#07877f; font-size:12px; font-weight:800; }
+.ng-user-bio-overlay { position:fixed; inset:0; z-index:1000; display:grid; place-items:center; padding:16px; background:rgba(2,15,22,.72); }
+.ng-user-bio { position:relative; width:min(100%,520px); max-height:90dvh; overflow:auto; padding:26px; border:1px solid #dce9ed; border-radius:20px; background:#fff; color:#173548; box-shadow:0 24px 80px rgba(0,0,0,.3); }
+.ng-user-bio-close { position:absolute; top:12px; right:12px; display:grid; width:36px; height:36px; place-items:center; border:0; border-radius:10px; background:#edf3f5; color:#234655; }
+.ng-user-bio-heading { display:flex; align-items:center; gap:14px; padding-right:35px; margin-bottom:22px; }
+.ng-user-bio-heading h3 { margin:0; font-size:19px; font-weight:900; }
+.ng-user-bio-heading p { margin:4px 0 0; color:#607985; overflow-wrap:anywhere; font-size:13px; }
+.ng-user-bio dl { display:grid; gap:10px; margin:0; }
+.ng-user-bio dl div { padding:12px; border-radius:11px; background:#f2f7f8; }
+.ng-user-bio dt { margin-bottom:4px; color:#607985; font-size:11px; font-weight:700; }
+.ng-user-bio dd { margin:0; color:#173548; font-size:14px; overflow-wrap:anywhere; }
+.ng-user-bio-delete { margin-top:18px; padding:10px 15px; border:0; border-radius:10px; background:#fee2e2; color:#b42318; font-weight:800; }
+@media(max-width:700px) { .ng-user-card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .ng-user-table { display:none; } .ng-user-card { padding:13px; } }
+@media(min-width:701px) { .ng-user-card-grid { display:none; } }
+
+/* Dark mode contrast: readable text on light controls/surfaces */
+.ng-dashboard-dark .ng-user-card { background:#17323d; border-color:#345460; color:#f0f7f9; }
+.ng-dashboard-dark .ng-user-card small { color:#b4c8cf; }
+.ng-dashboard-dark .ng-user-card:hover { background:#20454a; }
+.ng-dashboard-dark .ng-user-bio { background:#fff; color:#172f3d; }
+.ng-dashboard-dark .ng-user-bio h3,.ng-dashboard-dark .ng-user-bio dd { color:#172f3d; }
+.ng-dashboard-dark .ng-user-bio dt,.ng-dashboard-dark .ng-user-bio-heading p { color:#536d78; }
+.ng-dashboard-dark .ng-user-bio dl div { background:#f2f7f8; }
+.ng-dashboard-dark .ng-dash-panel input,.ng-dashboard-dark .ng-dash-panel textarea { background:#fff !important; color:#111827 !important; border-color:#cbd5e1 !important; }
+.ng-dashboard-dark .ng-dash-panel input::placeholder,.ng-dashboard-dark .ng-dash-panel textarea::placeholder { color:#64748b !important; }
+.dark-mode .service-card .text-slate-500 { color:#b8cbd2 !important; }
+
+.ng-application-customer-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+.ng-application-delete{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #fecaca;border-radius:10px;padding:9px 13px;background:#fff7f7;color:#b91c1c;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,border-color .2s}
+.ng-application-delete:hover{background:#fee2e2;border-color:#fca5a5}

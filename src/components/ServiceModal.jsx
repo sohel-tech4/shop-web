@@ -265,9 +265,6 @@ export default function ServiceModal({
                       <div className="visa-option-link mt-4 text-xs font-bold">
                         {isBn ? "প্রয়োজনীয় কাগজপত্র দেখুন →" : "View requirements →"}
                       </div>
-                      <span className="mt-3 inline-flex rounded-lg bg-[#07334a] px-4 py-2 text-sm font-bold text-white">
-                        {isBn ? "সেবা নিন" : "Get Service"}
-                      </span>
                     </button>
                   );
                 })}
@@ -365,7 +362,12 @@ export default function ServiceModal({
             {showOptions ? (
               <p className="text-center text-sm text-slate-500">{isBn ? "প্রথমে উপরের সেবার ধরন নির্বাচন করুন, এরপর আবেদন করতে পারবেন।" : "Choose an option above to continue with your request."}</p>
             ) : (
-              <button type="button" onClick={() => onApply?.(selectedOption ? { ...service, bn: `${service.bn} - ${selectedOption.titleBn}`, en: `${service.en} - ${selectedOption.titleEn}`, descBn: `${service.descBn} (${selectedOption.descBn})`, descEn: `${service.descEn} (${selectedOption.descEn})` } : service)} className="btn w-full rounded-xl border-0 bg-[#087f75] text-white hover:bg-[#066b64]">
+              <button
+                type="button"
+                onClick={() => onApply?.({ ...service, bn: contactServiceName, en: contactServiceName })}
+                className="btn w-full rounded-xl border-0 bg-[#087f75] text-white hover:bg-[#066b64]"
+              >
+                <MessageCircle size={18} />
                 {isBn ? "সেবা নিন — আবেদন করুন" : "Get Service — Apply Now"}
               </button>
             )}
