@@ -12,14 +12,14 @@ import ServiceModal from "./components/ServiceModal";
 import Chatbot from "./components/Chatbot";
 import ArticlesSection from "./components/ArticlesSection";
 import ArticleDetail from "./components/ArticleDetail";
-import ReviewsSection from "./components/ReviewsSection";
-import { articles, reviews } from "./data/articles";
+
+import { articles } from "./data/articles";
 import DashboardPage from "./components/DashboardPage";
 import AuthPortal from "./components/AuthPortal";
 import ApplicationCenter from "./components/ApplicationCenter";
 
 const readSession = () => {
-  try { const user = JSON.parse(localStorage.getItem("nagorik_auth_user") || "null"); return user?.phone && user?.pinVerified === true ? user : null; }
+  try { const user = JSON.parse(localStorage.getItem("nagorik_auth_user") || "null"); return user?.role === "admin" && user?.phone && user?.pinVerified === true ? user : null; }
   catch { return null; }
 };
 
@@ -46,8 +46,6 @@ export default function App() {
   const [applicationService, setApplicationService] = useState(null);
   const [showLoginSuccess, setShowLoginSuccess] = useState(false);
   const [showLogoutSuccess, setShowLogoutSuccess] = useState(false);
-  const [serviceReviews, setServiceReviews] = useState(() => { try { const v = JSON.parse(localStorage.getItem("nagorik_service_reviews") || "[]"); return Array.isArray(v) ? v : []; } catch { return []; } });
-  const [reviewToast, setReviewToast] = useState("");
   const [completedApplications, setCompletedApplications] = useState(() => { try { const v = JSON.parse(localStorage.getItem("nagorik_local_applications") || "[]"); return Array.isArray(v) ? v : []; } catch { return []; } });
 
   useEffect(() => {
@@ -58,7 +56,6 @@ export default function App() {
   useEffect(() => {
     if (route === "/dashboard" || route === "/admin") {
       try { const v = JSON.parse(localStorage.getItem("nagorik_local_applications") || "[]"); setCompletedApplications(Array.isArray(v) ? v : []); } catch { setCompletedApplications([]); }
-      try { const v = JSON.parse(localStorage.getItem("nagorik_service_reviews") || "[]"); setServiceReviews(Array.isArray(v) ? v : []); } catch { setServiceReviews([]); }
     }
   }, [route]);
 
@@ -117,46 +114,23 @@ export default function App() {
   const startApplication = (service) => {
     setSelectedService(null);
     setApplicationService(service);
-    if (!authUser) {
-      setShowAuth(true);
-      return;
-    }
     setShowApplications(true);
   };
   const closeService = () => { setSelectedService(null); setVisaType(null); setLandServiceType(null); };
-  const selectedServiceReviews = serviceReviews.filter((review) => review.serviceId === selectedService?.id);
-  const hasReviewedSelectedService = Boolean(authUser && serviceReviews.some((review) => review.serviceId === selectedService?.id && ((review.userId && review.userId === authUser.id) || review.email?.toLowerCase() === (authUser.phone || authUser.email)?.toLowerCase())));
-  const canReviewSelectedService = Boolean(authUser && !hasReviewedSelectedService && completedApplications.some((app) => app.serviceId === selectedService?.id && app.status === "completed" && (app.userId === authUser.id || app.userEmail?.toLowerCase() === (authUser.phone || authUser.email)?.toLowerCase())));
-  const saveReview = ({ serviceId, serviceNameBn, serviceNameEn, rating, comment }) => {
-    if (!authUser || !serviceId || !comment?.trim()) return false;
-    const alreadyReviewed = serviceReviews.some((item) => item.serviceId === serviceId && ((item.userId && item.userId === authUser.id) || item.email?.toLowerCase() === (authUser.phone || authUser.email)?.toLowerCase()));
-    if (alreadyReviewed) return false;
-    const nextReview = { id: `${authUser.id || (authUser.phone || authUser.email)}-${serviceId}`, serviceId, serviceNameBn, serviceNameEn, userId: authUser.id, email: (authUser.phone || authUser.email), displayName: authUser.displayName || (authUser.phone || authUser.email), rating, comment: comment.trim(), createdAt: new Date().toISOString() };
-    const next = [...serviceReviews, nextReview];
-    setServiceReviews(next);
-    localStorage.setItem("nagorik_service_reviews", JSON.stringify(next));
-    setReviewToast("আপনার রিভিউ সফলভাবে জমা হয়েছে!");
-    window.setTimeout(() => setReviewToast(""), 3500);
-    return true;
-  };
-  const submitServiceReview = ({ rating, comment }) => {
-    if (!selectedService || !canReviewSelectedService) return;
-    saveReview({ serviceId: selectedService.id, serviceNameBn: selectedService.bn, serviceNameEn: selectedService.en, rating, comment });
-  };
-  const submitDashboardReview = (review) => saveReview(review);
   const scrollToServices = () => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
   const showArticles = () => { setSelectedArticle(null); requestAnimationFrame(() => document.getElementById("articles")?.scrollIntoView({ behavior: "smooth" })); };
   const openArticle = (article) => { setSelectedArticle(article); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
-  if (route === "/admin" || route === "/dashboard") {
-    if (!authUser) return <AuthPortal lang={lang} setLang={setLang} onClose={() => navigate("/")} onAuthenticated={handleAuthenticated} />;
+  if (route === "/dashboard") return <Navigate to="/" replace />;
+  if (route === "/admin") {
+    if (!authUser) return <>
+      <AuthPortal lang={lang} setLang={setLang} onClose={() => navigate("/")} onAuthenticated={handleAuthenticated} />
+      <Chatbot lang={lang} />
+    </>;
     const isAdmin = authUser.role === "admin";
-    if ((route === "/admin") !== isAdmin) {
-      return <Navigate to={isAdmin ? "/admin" : "/dashboard"} replace />;
-    }
+    if (!isAdmin) return <Navigate to="/" replace />;
     return <>
-      <DashboardPage user={authUser} isAdmin={isAdmin} lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} onLogout={handleLogout} onHome={() => navigate("/")} completedApplications={completedApplications} serviceReviews={serviceReviews} onSubmitServiceReview={submitDashboardReview} onProfileUpdated={setAuthUser} />
-      {reviewToast && <div className="logout-success-toast" role="status" aria-live="polite"><span className="logout-success-icon">✓</span><span><strong>{reviewToast}</strong><small>সংশ্লিষ্ট সেবার রিভিউতে যুক্ত হয়েছে।</small></span></div>}
+      <DashboardPage user={authUser} isAdmin={isAdmin} lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} onLogout={handleLogout} onHome={() => navigate("/")} completedApplications={completedApplications} onProfileUpdated={setAuthUser} />
       {showLoginSuccess && <div className="login-success-overlay" role="dialog" aria-modal="true" aria-labelledby="login-success-title">
         <div className="login-success-card">
           <button className="login-success-close" onClick={() => setShowLoginSuccess(false)} aria-label="Close">×</button>
@@ -170,6 +144,7 @@ export default function App() {
           <p className="login-success-foot">{lang === "bn" ? "আপনার তথ্য সুরক্ষিত রাখুন" : "Keep your information secure"} • Nagorik e-Service</p>
         </div>
       </div>}
+      <Chatbot lang={lang} />
     </>;
   }
 
@@ -178,21 +153,20 @@ export default function App() {
       <span className="logout-success-icon">✓</span>
       <span><strong>{lang === "bn" ? "লগআউট সফল হয়েছে!" : "Logged out successfully!"}</strong><small>{lang === "bn" ? "আপনি নিরাপদে আপনার অ্যাকাউন্ট থেকে বের হয়েছেন।" : "You have safely signed out of your account."}</small></span>
     </div>}
-    <Header lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} onShowArticles={showArticles} onLogin={() => authUser ? navigate(authUser.role === "admin" ? "/admin" : "/dashboard") : setShowAuth(true)} onLogout={handleLogout} authUser={authUser} />
+    <Header lang={lang} setLang={setLang} darkMode={darkMode} setDarkMode={setDarkMode} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} onShowArticles={showArticles} onLogin={() => authUser?.role === "admin" ? navigate("/admin") : setShowAuth(true)} onLogout={handleLogout} authUser={authUser} />
     <main id="home">
       {selectedArticle ? <ArticleDetail lang={lang} article={selectedArticle} onBack={() => { setSelectedArticle(null); requestAnimationFrame(() => document.getElementById("articles")?.scrollIntoView({ behavior: "smooth" })); }} relatedArticles={articles.filter((item) => item.id !== selectedArticle.id).slice(0, 3)} onSelect={openArticle} /> : <>
         <Hero lang={lang} serviceCount={services.length} onExplore={scrollToServices} />
         <ServicesSection lang={lang} services={filteredServices} activeCategory={activeCategory} setActiveCategory={setActiveCategory} query={query} setQuery={setQuery} onSelect={openService} onApply={startApplication} />
         <AboutSection lang={lang} />
         <ArticlesSection lang={lang} articles={articles} onSelect={openArticle} />
-        <ReviewsSection lang={lang} reviews={reviews} />
         <ContactSection lang={lang} />
       </>}
     </main>
     <Footer lang={lang} />
-    <ServiceModal lang={lang} service={selectedService} visaType={visaType} setVisaType={setVisaType} landServiceType={landServiceType} setLandServiceType={setLandServiceType} onClose={closeService} onApply={startApplication} reviews={selectedServiceReviews} canReview={canReviewSelectedService} onSubmitReview={submitServiceReview} authUser={authUser} hasReviewed={hasReviewedSelectedService} />
+    <ServiceModal lang={lang} service={selectedService} visaType={visaType} setVisaType={setVisaType} landServiceType={landServiceType} setLandServiceType={setLandServiceType} onClose={closeService} onApply={startApplication} />
     <Chatbot lang={lang} />
-    {showApplications && <ApplicationCenter lang={lang} user={authUser} initialService={applicationService} onClose={() => { setShowApplications(false); setApplicationService(null); }} />}
+    {showApplications && <ApplicationCenter lang={lang} user={null} initialService={applicationService} onClose={() => { setShowApplications(false); setApplicationService(null); }} />}
     {showAuth && <AuthPortal lang={lang} setLang={setLang} onClose={() => setShowAuth(false)} onAuthenticated={handleAuthenticated} />}
   </div>;
 }

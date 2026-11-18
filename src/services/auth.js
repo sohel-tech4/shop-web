@@ -40,29 +40,8 @@ export async function signIn(phone, pin, confirmPin = '') {
     return admin;
   }
 
-  const users = readUsers();
-  let user = users.find((item) => normalizePhone(item.phone || item.email) === cleanPhone);
-  if (user?.pinHash) {
-    const actual = await derivePin(pin, user.pinSalt);
-    if (actual !== user.pinHash) throw new Error('মোবাইল নম্বর অথবা PIN সঠিক নয়।');
-  } else {
-    if (pin !== String(confirmPin || '')) throw new Error('নিশ্চিত PIN মিলছে না।');
-    if (user?.pinHash) throw new Error('এই নম্বরের PIN ইতিমধ্যে সেট করা আছে।');
-    const pinSalt = makeId();
-    const pinHash = await derivePin(pin, pinSalt);
-    if (!user) {
-      user = { id: makeId(), displayName: '', phone: cleanPhone, email: cleanPhone, role: 'user', createdAt: new Date().toISOString() };
-      users.push(user);
-    }
-    user.phone = cleanPhone;
-    user.email = cleanPhone;
-    user.pinSalt = pinSalt;
-    user.pinHash = pinHash;
-    writeUsers(users);
-  }
-  const result = safeUser(user);
-  localStorage.setItem(SESSION_KEY, JSON.stringify(result));
-  return result;
+  throw new Error('শুধুমাত্র অ্যাডমিন লগইন করতে পারবেন।');
+
 }
 
 export function getRegisteredUsers() {

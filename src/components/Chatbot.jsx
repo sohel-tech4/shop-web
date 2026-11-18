@@ -8,18 +8,22 @@ import {
   RotateCcw,
   LoaderCircle,
   Mail,
-  Phone,
 } from "lucide-react";
+import { BUSINESS, getMailUrl, getWhatsAppUrl } from "../config";
 
 const getGreeting = (lang) =>
   lang === "en"
-    ? "Hello! 👋 Welcome to Nagorik Computer & e-Service. How can I help you today? You can ask about our services and required documents."
-    : "আসসালামু আলাইকুম! 👋 Nagorik Computer & e-Service-এ স্বাগতম। কীভাবে সাহায্য করতে পারি? আমাদের সার্ভিস ও প্রয়োজনীয় কাগজপত্র সম্পর্কে জানতে পারেন।";
+    ? `Hello! 👋 Welcome to Nagorik Computer & e-Service. How can I help you today? You can ask about our services and required documents.
+
+For direct contact: WhatsApp ${BUSINESS.whatsappDisplay}: +${BUSINESS.whatsappNumber} | Email: ${BUSINESS.email}.`
+    : `আসসালামু আলাইকুম! 👋 Nagorik Computer & e-Service-এ স্বাগতম। কীভাবে সাহায্য করতে পারি? আমাদের সার্ভিস ও প্রয়োজনীয় কাগজপত্র সম্পর্কে জানতে পারেন।
+
+সরাসরি যোগাযোগ: WhatsApp: +${BUSINESS.whatsappNumber} | ইমেইল: ${BUSINESS.email}`;
 
 const getErrorMessage = (lang) =>
   lang === "en"
-    ? "Sorry! Our AI Assistant is temporarily unavailable. Please contact us directly using the options below."
-    : "দুঃখিত! আমাদের AI Assistant এই মুহূর্তে সাময়িকভাবে কাজ করছে না। নিচের মাধ্যমে সরাসরি যোগাযোগ করুন।";
+    ? `Sorry! Our AI Assistant is temporarily unavailable. Please try again later. Contact us on WhatsApp: +${BUSINESS.whatsappNumber} or email: ${BUSINESS.email}.`
+    : `দুঃখিত! আমাদের AI Assistant এই মুহূর্তে সাময়িকভাবে কাজ করছে না। সরাসরি যোগাযোগ করুন: WhatsApp: +${BUSINESS.whatsappNumber} অথবা ইমেইল: ${BUSINESS.email}। সেবা কার্ডের ‘সেবা নিন’ বাটন দিয়েও আবেদন পাঠাতে পারবেন।`;
 
 export default function Chatbot({ lang = "bn" }) {
   const [open, setOpen] = useState(false);
@@ -204,6 +208,11 @@ export default function Chatbot({ lang = "bn" }) {
               : "এখানে পাসওয়ার্ড, OTP বা পরিচয়পত্রের সম্পূর্ণ তথ্য পাঠাবেন না।"}
           </div>
 
+          <div className="ng-chat-contact-links" aria-label={lang === "en" ? "Direct contact options" : "সরাসরি যোগাযোগের মাধ্যম"}>
+            <a href={getWhatsAppUrl()} target="_blank" rel="noreferrer"><MessageCircle size={14} /> WhatsApp: +{BUSINESS.whatsappNumber}</a>
+            <a href={getMailUrl()}><Mail size={14} /> {BUSINESS.email}</a>
+          </div>
+
           <div
             className="ng-chat-messages"
             aria-live="polite"
@@ -225,29 +234,6 @@ export default function Chatbot({ lang = "bn" }) {
 
                 <div className="ng-chat-bubble">
                   <div>{message.content}</div>
-
-                  {message.showContact && (
-                    <div className="ng-chat-contact">
-                      <a
-                        href="mailto:dhaka2627@gmail.com"
-                        className="ng-chat-contact-link"
-                      >
-                        <span> <Mail size={16} />dhaka2627@gmail.com (Email)
-                        </span>
-                      </a>
-                      <a
-                        href="https://wa.me/8801776462919"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="ng-chat-contact-link"
-                      >
-                        <MessageCircle size={17} />
-                        <span>
-                          01776462919 (WhatsApp)
-                        </span>
-                      </a>
-                    </div>
-                  )}
                 </div>
               </div>
             ))}

@@ -633,7 +633,7 @@ footer .text-white\/45 {
   }
 }
 
-/* Articles, reading pages and customer feedback */
+/* Articles and reading pages */
 .ng-content-section { scroll-margin-top: 88px; }
 .ng-eyebrow { display: inline-flex; align-items: center; gap: 7px; border: 1px solid #bce9df; border-radius: 999px; background: #effcf8; padding: 7px 13px; color: #087e76; font-size: 11px; font-weight: 800; letter-spacing: .06em; }
 .ng-article-card { display: block; min-width: 0; overflow: hidden; border: 1px solid #e7edf0; border-radius: 18px; background: #fff; box-shadow: 0 5px 18px rgba(20,55,65,.045); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
@@ -644,19 +644,15 @@ footer .text-white\/45 {
 .ng-article-image span { position: absolute; left: 9px; top: 9px; border-radius: 999px; background: rgba(255,255,255,.94); padding: 4px 8px; color: #087e76; font-size: 9px; font-weight: 800; }
 .ng-article-title { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; color: #18313b; font-size: 13px; font-weight: 850; line-height: 1.55; }
 .ng-article-excerpt { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; margin-top: 7px; color: #71808a; font-size: 11px; line-height: 1.7; }
-.ng-review-card { min-width: 0; border: 1px solid #e7edf0; border-radius: 18px; background: #fff; padding: 13px; box-shadow: 0 5px 18px rgba(20,55,65,.04); }
 .ng-article-detail { min-height: 65vh; background: linear-gradient(180deg,#f7fbfb 0%,#fff 360px); }
 .dark-mode .ng-content-section { background-color: #10252c; }
-.dark-mode .ng-article-card, .dark-mode .ng-review-card { border-color: #314b55; background: #17323b; }
-.dark-mode .ng-article-title, .dark-mode .ng-review-card h3 { color: #edf7f8; }
-.dark-mode .ng-article-excerpt, .dark-mode .ng-review-card p { color: #bdcbd0; }
+@media (min-width: 640px) { .ng-article-image { height: 190px; } .ng-article-title { font-size: 16px; } .ng-article-excerpt { font-size: 13px; } }
+@media (max-width: 380px) { .ng-article-card { border-radius: 14px; } .ng-article-image { height: 105px; } .ng-article-title { font-size: 11px; } .ng-article-excerpt { font-size: 10px; } }
 .dark-mode .ng-article-detail { background: linear-gradient(180deg,#10252c 0%,#142b33 360px); }
 .dark-mode .ng-article-detail h1, .dark-mode .ng-article-detail h2 { color: #f1f8fa; }
 .dark-mode .ng-article-detail article > p, .dark-mode .ng-article-detail article .text-slate-700, .dark-mode .ng-article-detail article .text-slate-600 { color: #c4d3d9; }
 .dark-mode .ng-article-detail button { border-color: #38545e; color: #d8e7eb; }
 .dark-mode .ng-eyebrow { border-color: #315e5a; background: #173b3a; color: #91e2d3; }
-@media (min-width: 640px) { .ng-article-image { height: 190px; } .ng-article-title { font-size: 16px; } .ng-article-excerpt { font-size: 13px; } .ng-review-card { padding: 20px; } }
-@media (max-width: 380px) { .ng-article-card, .ng-review-card { border-radius: 14px; } .ng-article-image { height: 105px; } .ng-article-title { font-size: 11px; } .ng-article-excerpt { font-size: 10px; } .ng-review-card { padding: 10px; } }
 
 /* Authentication and account dashboards */
 .auth-overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(4,20,30,.68);backdrop-filter:blur(7px);overflow-y:auto}
@@ -1154,3 +1150,218 @@ footer .text-white\/45 {
 .ng-dashboard-dark .ng-dash-panel input,.ng-dashboard-dark .ng-dash-panel textarea { background:#fff !important; color:#111827 !important; border-color:#cbd5e1 !important; }
 .ng-dashboard-dark .ng-dash-panel input::placeholder,.ng-dashboard-dark .ng-dash-panel textarea::placeholder { color:#64748b !important; }
 .dark-mode .service-card .text-slate-500 { color:#b8cbd2 !important; }
+
+
+/* Clearly show the selected nested service option after touch/click */
+.visa-option.is-selected {
+  background: #e2f7f2 !important;
+  border-color: #159f9b !important;
+  box-shadow: 0 0 0 3px rgba(21, 159, 155, 0.16), 0 14px 30px rgba(15, 112, 128, 0.12) !important;
+}
+.visa-option.is-selected .visa-option-icon {
+  background: #c9eee6 !important;
+  border-color: #159f9b !important;
+  color: #075e61 !important;
+}
+.visa-option.is-selected .visa-option-title { color: #064e52 !important; }
+.visa-option.is-selected .visa-option-link { color: #087f75 !important; }
+.dark-mode .visa-option.is-selected {
+  background: #174b4a !important;
+  border-color: #72e3d3 !important;
+  box-shadow: 0 0 0 3px rgba(114, 227, 211, 0.18), 0 14px 30px rgba(0,0,0,.22) !important;
+}
+.dark-mode .visa-option.is-selected .visa-option-icon {
+  background: #205d59 !important;
+  border-color: #72e3d3 !important;
+  color: #b7fff2 !important;
+}
+.dark-mode .visa-option.is-selected .visa-option-title { color: #ffffff !important; }
+.dark-mode .visa-option.is-selected .visa-option-link { color: #a5fff0 !important; }
+
+/* Visible hover feedback for nested service cards (visa, land and other service options) */
+.visa-option:hover,
+.visa-option:focus-visible {
+  background: #e8f8f4 !important;
+  border-color: #159f9b !important;
+  box-shadow: 0 0 0 3px rgba(21, 159, 155, 0.12), 0 15px 35px rgba(15,112,128,.14) !important;
+}
+.dark-mode .visa-option:hover,
+.dark-mode .visa-option:focus-visible {
+  background: #1b4148 !important;
+  border-color: #72e3d3 !important;
+  box-shadow: 0 0 0 3px rgba(114, 227, 211, 0.14), 0 18px 38px rgba(0,0,0,.28) !important;
+}
+
+/* Informational sub-cards used by services without a dedicated option selector */
+.service-modal-box .service-option-card,
+.service-modal-box .bg-base-200.rounded-xl {
+  transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.service-modal-box .service-option-card:hover,
+.service-modal-box .bg-base-200.rounded-xl:hover {
+  background: #e8f8f4 !important;
+  border-color: #b7e7dc !important;
+  box-shadow: 0 8px 22px rgba(15,112,128,.09);
+  transform: translateY(-2px);
+}
+.dark-mode .service-modal-box .service-option-card:hover,
+.dark-mode .service-modal-box .bg-base-200.rounded-xl:hover {
+  background: #1b4148 !important;
+  border-color: #3c7775 !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,.2);
+}
+
+
+/* Dark mode: article cards and image-led content */
+.dark-mode .ng-article-card {
+  background: #142b35 !important;
+  border-color: #2a4652 !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.24);
+}
+.dark-mode .ng-article-card:hover {
+  background: #193640 !important;
+  border-color: #4aa99e !important;
+}
+.dark-mode .ng-article-title { color: #eef8fa !important; }
+.dark-mode .ng-article-excerpt { color: #a9bdc6 !important; }
+.dark-mode .ng-article-card .text-slate-400 { color: #8fa7b1 !important; }
+.dark-mode .ng-article-image { background: #1b3540; }
+.dark-mode .ng-article-image img { filter: brightness(.82) saturate(.9); }
+.dark-mode .ng-article-image span { background: rgba(17,42,51,.94); color: #83e4d5; }
+
+/* Keep the primary service CTA teal in both light and dark themes. */
+.dark-mode .modal-box .service-apply-btn,
+.dark-mode .modal-box .service-apply-btn:hover {
+  background: #087f75 !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+.ng-chat-contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e8f0f2;
+  background: #f1faf9;
+  font-size: 10px;
+}
+.ng-chat-contact-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #087e76;
+  font-weight: 700;
+  text-decoration: none;
+}
+.ng-chat-contact-links a:hover { text-decoration: underline; }
+.dark-mode .ng-chat-contact-links {
+  background: #18343c;
+  border-color: #314b55;
+}
+.dark-mode .ng-chat-contact-links a { color: #80e5d6; }
+
+/* Full dark theme for the customer service-request modal and its form. */
+.dark-mode .application-modal {
+  background: #102a35 !important;
+  color: #e6f1f4 !important;
+  border-color: #2c4853 !important;
+  box-shadow: 0 28px 90px rgba(0,0,0,.55) !important;
+}
+.dark-mode .application-head { border-color: #29434e !important; }
+.dark-mode .application-head h2,
+.dark-mode .application-success h3,
+.dark-mode .application-result h3 { color: #edf7f9 !important; }
+.dark-mode .application-head p,
+.dark-mode .application-success > p,
+.dark-mode .application-result p { color: #a8bdc6 !important; }
+.dark-mode .application-head > button { background: #203d49 !important; color: #e6f1f4 !important; }
+.dark-mode .application-tabs button { color: #b2c5cc !important; }
+.dark-mode .application-tabs button.active { background: #174641 !important; color: #8ce7d7 !important; }
+.dark-mode .application-form label,
+.dark-mode .application-track label { color: #d2e2e7 !important; }
+.dark-mode .application-form input,
+.dark-mode .application-form select,
+.dark-mode .application-form textarea,
+.dark-mode .application-track input {
+  background: #0b202a !important;
+  color: #e7f1f4 !important;
+  border-color: #35515d !important;
+  color-scheme: dark;
+}
+.dark-mode .application-form input::placeholder,
+.dark-mode .application-form textarea::placeholder,
+.dark-mode .application-track input::placeholder { color: #829ba5 !important; }
+.dark-mode .application-form input:focus,
+.dark-mode .application-form select:focus,
+.dark-mode .application-form textarea:focus,
+.dark-mode .application-track input:focus {
+  border-color: #36b8aa !important;
+  box-shadow: 0 0 0 3px rgba(54,184,170,.16) !important;
+}
+.dark-mode .application-form select option { background: #0b202a; color: #e7f1f4; }
+.dark-mode .application-disclaimer { background: #3a3020 !important; color: #f0d59a !important; }
+.dark-mode .application-foot { border-color: #29434e !important; color: #91a8b1 !important; }
+.dark-mode .application-foot button { color: #83e5d6 !important; }
+.dark-mode .application-success-icon { background: #17483e !important; color: #83e5c1 !important; }
+.dark-mode .tracking-code { background: #123a38 !important; border-color: #269d91 !important; }
+.dark-mode .tracking-code small { color: #a8c8c9 !important; }
+.dark-mode .tracking-code strong { color: #8ce7d7 !important; }
+.dark-mode .tracking-code button { background: #20564f !important; color: #b8fff0 !important; }
+.dark-mode .application-result { background: #0c222c !important; border-color: #304b57 !important; }
+.dark-mode .application-result-top strong { color: #8ce7d7 !important; }
+.dark-mode .application-timeline { background: #153b39 !important; color: #8ce7d7 !important; }
+.dark-mode .application-timeline small { color: #a7c5c4 !important; }
+.dark-mode .application-admin-note { background: #1b344b !important; color: #b8d8f5 !important; }
+.dark-mode .application-error { color: #ff9b91 !important; }
+
+/* Colorful confirmation shown before redirecting the applicant to WhatsApp. */
+.application-thankyou { position:relative; isolation:isolate; display:grid; justify-items:center; gap:1rem; overflow:hidden; padding:3rem 2rem; text-align:center; background:linear-gradient(145deg,#ffffff 0%,#effcf8 48%,#eef5ff 100%); }
+.application-thankyou-glow { position:absolute; z-index:-1; width:260px; height:260px; top:-150px; right:-90px; border-radius:50%; background:linear-gradient(135deg,#36d6ad,#60a5fa); filter:blur(3px); opacity:.22; }
+.application-thankyou-icon { display:grid; place-items:center; width:76px; height:76px; border-radius:25px; background:linear-gradient(135deg,#10b981,#0d9488); color:white; box-shadow:0 12px 28px rgba(13,148,136,.28); transform:rotate(-5deg); }
+.application-thankyou-icon span { font-size:2.7rem; line-height:1; font-weight:900; transform:rotate(5deg); }
+.application-thankyou-badge { padding:.38rem .9rem; border-radius:999px; background:#dff8ee; color:#087f68; font-size:.72rem; font-weight:900; letter-spacing:.08em; }
+.application-thankyou h2 { margin:0; font-size:2rem; font-weight:950; background:linear-gradient(90deg,#0891b2,#0d9488,#16a34a); color:transparent; background-clip:text; }
+.application-thankyou-message { max-width:440px; margin:0; color:#38596a; font-size:1rem; line-height:1.8; }
+.application-whatsapp-hint { display:grid; gap:.35rem; width:min(100%,440px); padding:1rem 1.2rem; border:1px solid #9ce6c7; border-radius:16px; background:linear-gradient(110deg,#e7fff2,#e8fbff); color:#12634f; }
+.application-whatsapp-hint strong { font-size:1rem; font-weight:900; }
+.application-whatsapp-hint span { font-size:.82rem; line-height:1.6; }
+.application-thankyou-footer { margin:.2rem 0 0; color:#647b89; font-size:.82rem; font-weight:700; }
+.dark-mode .application-thankyou { background:linear-gradient(145deg,#102a35 0%,#123b3b 55%,#172e49 100%); border-color:#31515c; }
+.dark-mode .application-thankyou-message { color:#c5d9df; }
+.dark-mode .application-thankyou-badge { background:#174b42; color:#8ce9c5; }
+.dark-mode .application-whatsapp-hint { border-color:#286b58; background:linear-gradient(110deg,#153e34,#153b49); color:#a7f3d0; }
+.dark-mode .application-thankyou-footer { color:#a9bec7; }
+@media(max-width:600px) { .application-thankyou { padding:2.3rem 1.1rem; } .application-thankyou h2 { font-size:1.7rem; } }
+
+
+/* Polished animated application thank-you experience */
+.application-thankyou { animation: thankyou-enter .65s cubic-bezier(.2,.85,.25,1) both; border:1px solid rgba(45,190,155,.25); box-shadow:0 28px 90px rgba(9,72,84,.22),0 0 0 1px rgba(255,255,255,.55) inset; }
+.application-thankyou-glow { width:360px; height:360px; top:-190px; right:-100px; background:conic-gradient(from 40deg,#34d399,#60a5fa,#c084fc,#fb7185,#34d399); filter:blur(18px); opacity:.25; animation:thankyou-glow 7s linear infinite; }
+.application-thankyou-icon { width:88px; height:88px; border-radius:28px; animation:thankyou-pop .75s .12s cubic-bezier(.16,1.4,.4,1) both,thankyou-float 3s 1s ease-in-out infinite; }
+.application-thankyou-icon span { text-shadow:0 2px 12px rgba(0,0,0,.15); }
+.application-thankyou-badge { animation:thankyou-rise .55s .2s both; }
+.application-thankyou h2 { animation:thankyou-rise .6s .28s both; }
+.application-thankyou-message { animation:thankyou-rise .6s .36s both; }
+.application-whatsapp-hint { animation:thankyou-rise .6s .44s both; box-shadow:0 10px 28px rgba(16,185,129,.09); }
+.application-thankyou-footer { animation:thankyou-rise .6s .52s both; }
+.application-thankyou-sparkles { position:absolute; inset:0; pointer-events:none; overflow:hidden; color:#0d9488; }
+.application-thankyou-sparkles i { position:absolute; font-style:normal; opacity:0; animation:thankyou-twinkle 2.8s ease-in-out infinite; }
+.application-thankyou-sparkles i:nth-child(1) { top:17%; left:13%; font-size:1.5rem; }
+.application-thankyou-sparkles i:nth-child(2) { top:27%; right:13%; font-size:2rem; animation-delay:.5s; }
+.application-thankyou-sparkles i:nth-child(3) { bottom:23%; left:9%; font-size:1.1rem; animation-delay:1s; }
+.application-thankyou-sparkles i:nth-child(4) { bottom:18%; right:10%; font-size:1.5rem; animation-delay:1.4s; }
+.application-thankyou-sparkles i:nth-child(5) { top:12%; right:35%; font-size:1rem; animation-delay:.8s; }
+.application-thankyou-progress { width:min(100%,390px); height:6px; overflow:hidden; border-radius:999px; background:rgba(13,148,136,.13); }
+.application-thankyou-progress span { display:block; width:100%; height:100%; border-radius:inherit; transform-origin:left; background:linear-gradient(90deg,#10b981,#06b6d4,#818cf8); animation:thankyou-countdown 5s linear forwards; }
+.dark-mode .application-thankyou { box-shadow:0 28px 90px rgba(0,0,0,.48),0 0 0 1px rgba(117,220,205,.08) inset; }
+.dark-mode .application-thankyou-sparkles { color:#7debd4; }
+.dark-mode .application-thankyou-progress { background:rgba(125,235,212,.15); }
+@keyframes thankyou-enter { from { opacity:0; transform:translateY(22px) scale(.94); filter:blur(5px); } to { opacity:1; transform:translateY(0) scale(1); filter:blur(0); } }
+@keyframes thankyou-pop { 0% { opacity:0; transform:scale(.35) rotate(-25deg); } 75% { transform:scale(1.12) rotate(5deg); } 100% { opacity:1; transform:scale(1) rotate(0); } }
+@keyframes thankyou-float { 0%,100% { translate:0 0; } 50% { translate:0 -7px; } }
+@keyframes thankyou-rise { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes thankyou-glow { to { transform:rotate(360deg); } }
+@keyframes thankyou-twinkle { 0%,100% { opacity:0; transform:scale(.5) rotate(0); } 45%,60% { opacity:.8; transform:scale(1.15) rotate(35deg); } }
+@keyframes thankyou-countdown { from { transform:scaleX(1); } to { transform:scaleX(0); } }
+@media (prefers-reduced-motion:reduce) { .application-thankyou,.application-thankyou * { animation-duration:.01ms !important; animation-iteration-count:1 !important; } }

@@ -72,36 +72,18 @@ export default function Footer({ lang }) {
 
               <ul className="space-y-4 text-sm text-white/70">
                 <li>
-                  <a
-                    href={getWhatsAppUrl()}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-start gap-2 transition hover:text-[#8af0e1]"
-                  >
-                    <MessageCircle size={17} className="mt-0.5 shrink-0" />
-                    <span>01776462919</span>
+                  <a href={getWhatsAppUrl()} target="_blank" rel="noreferrer" className="flex items-start gap-2 transition hover:text-[#8af0e1]">
+                    <MessageCircle size={17} className="mt-0.5 shrink-0" /><span>WhatsApp</span>
                   </a>
                 </li>
-
                 <li>
-                  <a
-                    href={getMailUrl()}
-                    className="flex items-start gap-2 transition hover:text-[#8af0e1]"
-                  >
-                    <Mail size={17} className="mt-0.5 shrink-0" />
-                    <span className="break-all">dhaka2627@gmail.com</span>
+                  <a href={getMailUrl()} className="flex items-start gap-2 transition hover:text-[#8af0e1]">
+                    <Mail size={17} className="mt-0.5 shrink-0" /><span>{isBn ? "ইমেইল" : "Email"}</span>
                   </a>
                 </li>
-
                 <li>
-                  <a
-                    href={BUSINESS.facebook}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-start gap-2 transition hover:text-[#8af0e1]"
-                  >
-                    <Facebook size={17} className="mt-0.5 shrink-0" />
-                    <span>Facebook</span>
+                  <a href={BUSINESS.facebook} target="_blank" rel="noreferrer" className="flex items-start gap-2 transition hover:text-[#8af0e1]">
+                    <Facebook size={17} className="mt-0.5 shrink-0" /><span>{isBn ? "Facebook গ্রুপ" : "Facebook Group"}</span>
                   </a>
                 </li>
               </ul>

@@ -22,13 +22,12 @@ export async function createApplication(data) {
     try { return JSON.parse(localStorage.getItem('nagorik_auth_user') || 'null'); }
     catch { return null; }
   })();
-  if (!(user?.phone || user?.email)) throw new Error('আবেদন জমা দিতে প্রথমে লগইন করুন।');
   const item = {
     id: makeId(),
     trackingId: makeTrackingId(),
-    userId: user.id,
-    userEmail: user.phone || user.email,
-    email: user.phone || user.email,
+    userId: user?.id || null,
+    userEmail: user?.phone || user?.email || '',
+    email: user?.phone || user?.email || '', 
     name: String(data.name || '').trim(),
     phone: String(data.phone || '').trim(),
     serviceId: data.serviceId,

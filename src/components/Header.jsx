@@ -9,7 +9,6 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
     ["#home", lang === "bn" ? "হোম" : "Home"],
     ["#services", lang === "bn" ? "সেবাসমূহ" : "Services"],
     ["#articles", lang === "bn" ? "আর্টিকেল" : "Articles"],
-    ["#reviews", lang === "bn" ? "রিভিউ" : "Reviews"],
     ["#about", lang === "bn" ? "কেন আমরা" : "Why Us"],
     ["#contact", lang === "bn" ? "যোগাযোগ" : "Contact"],
   ];
@@ -42,10 +41,10 @@ export default function Header({ lang, setLang, darkMode, setDarkMode, mobileMen
 
   const accountLabel = authUser
     ? (lang === "bn" ? "ড্যাশবোর্ড" : "Dashboard")
-    : (lang === "bn" ? "লগইন / অ্যাকাউন্ট" : "Login / Account");
+    : (lang === "bn" ? "এডমিন লগইন" : "Admin Login");
   const accountSubLabel = authUser
     ? (authUser.role === "admin" ? "Administrator" : (lang === "bn" ? "সাধারণ ব্যবহারকারী" : "User account"))
-    : (lang === "bn" ? "আপনার অ্যাকাউন্টে প্রবেশ করুন" : "Sign in to your account");
+    : (lang === "bn" ? "শুধুমাত্র এডমিনের জন্য" : "Administrator access only");
   const AccountIcon = authUser ? LayoutDashboard : UserRound;
   const profilePhoto = authUser?.photo || authUser?.photoURL || authUser?.photoUrl || authUser?.avatarUrl || authUser?.avatar || "";
   const profileInitial = (authUser?.displayName || authUser?.phone || authUser?.email || "U").trim().charAt(0).toUpperCase();

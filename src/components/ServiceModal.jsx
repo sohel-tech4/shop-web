@@ -1,19 +1,6 @@
-import { useState } from "react";
-import {
-  CheckCircle2,
-  FileText,
-  Mail,
-  MessageCircle,
-  Plane,
-  Stethoscope,
-  X,
-  ArrowLeft,
-  Sprout,
-  Files,
-  Star,
-} from "lucide-react";
+import { CheckCircle2, FileText, MessageCircle, Plane, Stethoscope, X, ArrowLeft, Sprout, Files } from "lucide-react";
 
-import { getMailUrl, getWhatsAppUrl } from "../config";
+
 import { fallbackServiceIcon, serviceIcons } from "../data/ui";
 
 export default function ServiceModal({
@@ -25,18 +12,10 @@ export default function ServiceModal({
   setLandServiceType,
   onClose,
   onApply,
-  reviews = [],
-  canReview = false,
-  onSubmitReview,
-  authUser,
-  hasReviewed = false,
 }) {
   if (!service) return null;
 
   const isBn = lang === "bn";
-  const [reviewRating, setReviewRating] = useState(5);
-  const [reviewText, setReviewText] = useState("");
-
   const Icon = serviceIcons[service.id] || fallbackServiceIcon;
 
   // All service options
@@ -248,7 +227,8 @@ export default function ServiceModal({
                       type="button"
                       key={option.id}
                       onClick={() => setSelectedType?.(option.id)}
-                      className="visa-option text-left"
+                      aria-pressed={selectedType === option.id}
+                      className={`visa-option text-left ${selectedType === option.id ? "is-selected" : ""}`}
                     >
                       <div className="visa-option-icon">
                         <OptionIcon size={25} />
@@ -342,8 +322,8 @@ export default function ServiceModal({
                 ) : (
                   <div className="mt-3 rounded-xl bg-base-200 p-4 text-sm leading-6 text-slate-600">
                     {isBn
-                      ? "এই সেবার প্রয়োজনীয় কাগজপত্র সম্পর্কে বিস্তারিত জানতে WhatsApp বা Email-এ যোগাযোগ করুন।"
-                      : "Contact us through WhatsApp or Email for information about the documents required for this service."}
+                      ? "সেবার প্রয়োজনীয় কাগজপত্র সম্পর্কে জানতে সেবা নিন বাটনে ক্লিক করে বিস্তারিত লিখুন।"
+                      : "Click Get Service and describe your request to ask about the required documents."}
                   </div>
                 )}
               </div>
@@ -362,63 +342,10 @@ export default function ServiceModal({
             {showOptions ? (
               <p className="text-center text-sm text-slate-500">{isBn ? "প্রথমে উপরের সেবার ধরন নির্বাচন করুন, এরপর আবেদন করতে পারবেন।" : "Choose an option above to continue with your request."}</p>
             ) : (
-              <a
-                href={getWhatsAppUrl(contactServiceName)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn w-full rounded-xl border-0 bg-[#087f75] text-white hover:bg-[#066b64]"
-              >
-                <MessageCircle size={18} />
-                {isBn ? "সেবা নিন — আবেদন করুন" : "Get Service — Apply Now"}
-              </a>
+              <button type="button" onClick={() => onApply?.({ ...service, bn: contactServiceName, en: contactServiceName })} className="service-apply-btn btn w-full rounded-xl border-0 bg-[#087f75] text-white hover:bg-[#066b64]">
+                <MessageCircle size={18} /> {isBn ? "সেবা নিন" : "Get Service"}
+              </button>
             )}
-          </div>
-
-          {/* Service reviews */}
-          <section className="mt-8 border-t border-slate-200 pt-6" aria-label={isBn ? "সেবার রিভিউ" : "Service reviews"}>
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h4 className="text-lg font-black text-[#07334a]">{isBn ? "এই সেবার গ্রাহক রিভিউ" : "Customer reviews for this service"}</h4>
-              <div className="flex items-center gap-1 text-amber-500" aria-label={isBn ? "প্রাথমিক আনুমানিক রেটিং ৪.৫" : "Initial estimated rating 4.5"}>
-                {Array.from({ length: 5 }, (_, i) => <Star key={i} size={16} fill={i < 4 ? "currentColor" : "none"} />)}
-                <strong className="ml-1 text-sm">{reviews.length ? (reviews.reduce((sum, item) => sum + Number(item.rating || 0), 0) / reviews.length).toFixed(1) : "4.5"}</strong>
-              </div>
-            </div>
-            {!reviews.length && <p className="mt-2 text-xs text-slate-400">{isBn ? "এটি প্রাথমিক আনুমানিক রেটিং; প্রকৃত রিভিউ জমা হলে গড় রেটিং দেখাবে।" : "This is an initial estimated rating; the average will reflect submitted reviews once available."}</p>}
-            <div className="mt-4 space-y-3">
-              {reviews.map((review) => <article key={review.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                <div className="flex items-center justify-between gap-2"><strong className="text-sm text-slate-800">{review.displayName || review.email}</strong><span className="flex text-amber-500">{Array.from({ length: Number(review.rating) || 0 }, (_, i) => <Star key={i} size={13} fill="currentColor" />)}</span></div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{review.comment}</p>
-                <small className="text-xs text-slate-400">{new Date(review.createdAt).toLocaleDateString(isBn ? "bn-BD" : "en-US")}</small>
-              </article>)}
-              {!reviews.length && <p className="text-sm text-slate-500">{isBn ? "এখনো কোনো গ্রাহক রিভিউ দেননি।" : "No customer reviews yet."}</p>}
-            </div>
-            {canReview ? <form className="mt-5 rounded-xl bg-[#eefbf8] p-4" onSubmit={(e) => { e.preventDefault(); if (reviewText.trim()) { onSubmitReview?.({ rating: reviewRating, comment: reviewText.trim() }); setReviewText(""); } }}>
-              <h5 className="font-bold text-[#07334a]">{isBn ? "আপনার অভিজ্ঞতা লিখুন" : "Share your experience"}</h5>
-              <div className="mt-3 flex items-center gap-1" aria-label={isBn ? "স্টার রেটিং নির্বাচন করুন" : "Choose star rating"}>{Array.from({ length: 5 }, (_, i) => <button type="button" key={i} onClick={() => setReviewRating(i + 1)} aria-label={`${i + 1} stars`} className="rounded p-1 text-amber-500"><Star size={25} fill={i < reviewRating ? "currentColor" : "none"}/></button>)}</div>
-              <textarea value={reviewText} onChange={(e) => setReviewText(e.target.value)} required rows={3} maxLength={700} placeholder={isBn ? "সেবাটি সম্পর্কে আপনার মতামত লিখুন..." : "Write your review..."} className="mt-3 w-full rounded-xl border border-slate-200 bg-white p-3 text-sm" />
-              <button type="submit" className="btn mt-3 rounded-xl bg-[#087f75] text-white">{isBn ? "রিভিউ জমা দিন" : "Submit review"}</button>
-            </form> : <p className="mt-4 text-xs text-slate-500">{hasReviewed ? (isBn ? "আপনি এই সেবায় ইতিমধ্যে রিভিউ দিয়েছেন। দ্বিতীয়বার রিভিউ দেওয়া যাবে না।" : "You have already reviewed this service. A second review is not allowed.") : (isBn ? (authUser ? "রিভিউ দিতে হলে এই সেবার আবেদন সম্পন্ন হতে হবে। ড্যাশবোর্ডের ‘আমার রিভিউ’ থেকেও রিভিউ দিতে পারবেন।" : "রিভিউ দিতে লগইন করুন এবং এই সেবার আবেদন সম্পন্ন করুন।") : (authUser ? "Complete an application for this service, then review it from My Reviews in your dashboard." : "Sign in and complete an application for this service to leave a review."))}</p>}
-          </section>
-
-          {/* Contact buttons */}
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <a
-              href={getWhatsAppUrl(contactServiceName)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-primary flex-1 rounded-xl text-white"
-            >
-              <MessageCircle size={18} />
-              WhatsApp
-            </a>
-
-            <a
-              href={getMailUrl(contactServiceName)}
-              className="btn flex-1 rounded-xl border-slate-200 bg-white"
-            >
-              <Mail size={18} />
-              Email
-            </a>
           </div>
         </div>
       </div>

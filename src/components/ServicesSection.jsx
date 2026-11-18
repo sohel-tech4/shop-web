@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Search, ChevronDown, ChevronUp, Star } from "lucide-react";
+import { ArrowRight, Search, ChevronDown, ChevronUp } from "lucide-react";
 import { categories, fallbackServiceIcon, serviceIcons } from "../data/ui";
 
 export default function ServicesSection({ lang, services, activeCategory, setActiveCategory, query, setQuery, onSelect, onApply }) {
@@ -32,7 +32,7 @@ export default function ServicesSection({ lang, services, activeCategory, setAct
         <div>
           <div className="mb-2 text-sm font-bold uppercase tracking-wider text-[#159f9b]">{lang === "bn" ? "আমাদের সেবা" : "Our Services"}</div>
           <h2 className="text-3xl font-black tracking-tight text-[#07334a] sm:text-4xl">{lang === "bn" ? "যে সেবাগুলো আপনি পাবেন" : "Services You Can Get"}</h2>
-          <p className="mt-2 max-w-2xl text-slate-500">{lang === "bn" ? "একটি সেবায় ক্লিক করলে প্রয়োজনীয় কাগজপত্র ও যোগাযোগের অপশন দেখাবে।" : "Click a service to see requirements and contact options."}</p>
+          <p className="mt-2 max-w-2xl text-slate-500">{lang === "bn" ? "সেবা নিন চাপলে নাম, মোবাইল নম্বর ও কাজের বিস্তারিত দিয়ে সরাসরি WhatsApp-এ আবেদন পাঠাতে পারবেন।" : "Click Get Service to enter your name, mobile number and request details, then send via WhatsApp."}</p>
         </div>
         <label className="input input-bordered flex w-full items-center gap-2 rounded-xl bg-white lg:max-w-xs">
           <Search size={18} className="text-slate-400" />
@@ -52,8 +52,21 @@ export default function ServicesSection({ lang, services, activeCategory, setAct
         {visibleServices.map((service) => {
           const Icon = serviceIcons[service.id] || fallbackServiceIcon;
           return (
-            <article key={service.id} className="service-card group flex flex-col text-left">
-              <button type="button" onClick={() => onSelect(service)} className="block w-full flex-1 text-left">
+            <article
+              key={service.id}
+              className="service-card group flex cursor-pointer flex-col text-left"
+              role="button"
+              tabIndex={0}
+              onClick={() => onSelect(service)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  onSelect(service);
+                }
+              }}
+              aria-label={`${lang === "bn" ? service.bn : service.en} - ${lang === "bn" ? "বিস্তারিত দেখুন" : "View details"}`}
+            >
+              <div className="block w-full flex-1 text-left">
                 <div className="flex items-start justify-between gap-3">
                   <div className="service-icon"><Icon size={23} strokeWidth={1.9} /></div>
                   <ArrowRight size={18} className="mt-2 text-slate-300 transition group-hover:translate-x-1 group-hover:text-[#159f9b]" />
@@ -61,12 +74,10 @@ export default function ServicesSection({ lang, services, activeCategory, setAct
                 <div className="mt-5 text-lg font-bold text-[#07334a]">{lang === "bn" ? service.bn : service.en}</div>
                 <div className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">{lang === "bn" ? service.descBn : service.descEn}</div>
                 <div className="mt-4 flex items-center justify-between gap-2">
+                  <span className="text-xs font-semibold text-slate-400">{lang === "bn" ? "বিস্তারিত ও প্রয়োজনীয় তথ্য" : "Details & requirements"}</span>
                   <span className="text-xs font-bold text-[#159f9b]">{lang === "bn" ? "বিস্তারিত দেখুন →" : "View details →"}</span>
-                  <button type="button" onClick={() => onSelect(service)} className="inline-flex items-center gap-1 rounded-md text-xs font-bold text-amber-500 hover:underline" aria-label={lang === "bn" ? "রেটিং ও রিভিউ দেখুন" : "View ratings and reviews"}>
-                    <Star size={14} fill="currentColor" /> 4.5
-                  </button>
                 </div>
-              </button>
+              </div>
             </article>
           );
         })}

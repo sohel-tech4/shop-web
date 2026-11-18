@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import ApplicationsDashboard from "./ApplicationsDashboard";
-import UserReviewsDashboard from "./UserReviewsDashboard";
+
 import { getRegisteredUsers, updateUserProfile, deleteRegisteredUser } from "../services/auth";
 import { getLocalVisitorCount } from "./VisitorCounter";
-import { Activity, BarChart3, Bell, ChevronRight, FileText, LayoutDashboard, LogOut, Menu, MessageSquare, Settings, ShieldCheck, Users, BriefcaseBusiness, Globe, Search, UserRound, Globe2, Moon, Sun, ChevronDown, X } from "lucide-react";
+import { Activity, BarChart3, Bell, ChevronRight, FileText, LayoutDashboard, LogOut, Menu, Settings, ShieldCheck, Users, BriefcaseBusiness, Globe, Search, UserRound, Globe2, Moon, Sun, ChevronDown, X } from "lucide-react";
 
-export default function DashboardPage({ user, isAdmin, lang = "bn", setLang, darkMode = false, setDarkMode, onLogout, onHome, completedApplications = [], serviceReviews = [], onSubmitServiceReview, onProfileUpdated }) {
+export default function DashboardPage({ user, isAdmin, lang = "bn", setLang, darkMode = false, setDarkMode, onLogout, onHome, completedApplications = [], onProfileUpdated }) {
   const [active, setActive] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -31,13 +31,11 @@ export default function DashboardPage({ user, isAdmin, lang = "bn", setLang, dar
     { id: "users", label: tr("ব্যবহারকারী", "Users"), icon: Users },
     { id: "applications", label: tr("আবেদন ব্যবস্থাপনা", "Applications"), icon: FileText },
     { id: "services", label: tr("সার্ভিস ব্যবস্থাপনা", "Service Management"), icon: BriefcaseBusiness },
-    { id: "reviews", label: tr("রিভিউ ও কনটেন্ট", "Reviews & Content"), icon: MessageSquare },
     { id: "reports", label: tr("রিপোর্ট", "Reports"), icon: BarChart3 },
     { id: "settings", label: tr("সেটিংস", "Settings"), icon: Settings },
   ] : [
     { id: "overview", label: tr("ড্যাশবোর্ড", "Dashboard"), icon: LayoutDashboard },
     { id: "applications", label: tr("আমার আবেদন", "My Applications"), icon: FileText },
-    { id: "my-reviews", label: tr("আমার রিভিউ", "My Reviews"), icon: MessageSquare },
     { id: "profile", label: tr("প্রোফাইল", "Profile"), icon: UserRound },
     { id: "settings", label: tr("সেটিংস", "Settings"), icon: Settings },
   ];
@@ -122,10 +120,10 @@ export default function DashboardPage({ user, isAdmin, lang = "bn", setLang, dar
             {profileError && <p className="text-sm text-red-600">{profileError}</p>}
             <button type="submit" className="w-fit rounded-xl bg-teal-700 px-6 py-3 font-bold text-white">{tr("পরিবর্তন সংরক্ষণ করুন", "Save Changes")}</button>
           </form>
-        </div> : active === "applications" ? <ApplicationsDashboard user={user} isAdmin={isAdmin} lang={lang}/> : active === "my-reviews" && !isAdmin ? <UserReviewsDashboard user={user} applications={completedApplications} reviews={serviceReviews} lang={lang} onSubmit={onSubmitServiceReview}/> : active === "overview" ? <>
+        </div> : active === "applications" ? <ApplicationsDashboard user={user} isAdmin={isAdmin} lang={lang}/> : active === "overview" ? <>
           <div className="ng-dash-welcome"><div><span>{isAdmin ? tr("অ্যাডমিন কন্ট্রোল সেন্টার", "ADMIN CONTROL CENTER") : tr("আমার অ্যাকাউন্ট", "MY ACCOUNT")}</span><h2>{tr("স্বাগতম", "Welcome")}, {user.displayName || (user.phone || user.email)?.split("@")[0]}!</h2><p>{isAdmin ? tr("আপনার ওয়েবসাইট পরিচালনার সংক্ষিপ্ত বিবরণ এখানে দেখুন।", "View a quick overview of your website management here.") : tr("আপনার অ্যাকাউন্ট ও সেবার তথ্য এখান থেকে পরিচালনা করুন।", "Manage your account and service information here.")}</p></div><div className="ng-dash-welcome-mark"><Activity size={34}/></div></div>
           <div className="ng-dash-stat-grid">{(isAdmin ? [
-            [tr("মোট ব্যবহারকারী", "Total Users"), String(registeredUsers.length), "users", Users], [tr("মোট ভিজিটর", "Total Visitors"), String(visitorCount), "visitors", Globe], [tr("সার্ভিস", "Services"), tr("ওয়েবসাইটে প্রকাশিত", "Published on website"), "services", BriefcaseBusiness], [tr("রিভিউ", "Reviews"), tr("কনটেন্ট বিভাগ", "Content section"), "reviews", MessageSquare], [tr("অ্যাকাউন্ট স্ট্যাটাস", "Account Status"), tr("সক্রিয়", "Active"), "active", ShieldCheck],
+            [tr("মোট ব্যবহারকারী", "Total Users"), String(registeredUsers.length), "users", Users], [tr("মোট ভিজিটর", "Total Visitors"), String(visitorCount), "visitors", Globe], [tr("সার্ভিস", "Services"), tr("ওয়েবসাইটে প্রকাশিত", "Published on website"), "services", BriefcaseBusiness], [tr("অ্যাকাউন্ট স্ট্যাটাস", "Account Status"), tr("সক্রিয়", "Active"), "active", ShieldCheck],
           ] : [
             [tr("অ্যাকাউন্ট", "Account"), tr("সাধারণ ব্যবহারকারী", "Standard User"), "account", UserRound], [tr("মোবাইল নম্বর", "Mobile number"), tr("যাচাইকৃত লগইন তথ্য", "Verified login details"), "email", FileText], [tr("সেশন", "Session"), tr("লগইন সেশন", "Login session"), "session", Activity], [tr("স্ট্যাটাস", "Status"), tr("সক্রিয়", "Active"), "active", ShieldCheck],
           ]).map(([label,value,key,Icon]) => <article className="ng-dash-stat" key={key}><div className="ng-dash-stat-icon"><Icon size={20}/></div><span>{label}</span><strong>{value}</strong><small>{key === "active" ? tr("আপনার সেশন চালু আছে", "Your session is active") : key === "visitors" ? tr("এই ব্রাউজারের ভিজিট হিসাব থেকে", "Page loads in this browser") : tr("লোকাল স্টোরেজে সংরক্ষিত", "Saved in local storage")}</small></article>)}</div>
